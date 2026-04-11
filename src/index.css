@@ -83,6 +83,38 @@ body {
   gap: 10px;
 }
 
+.header-title-wrap {
+  flex: 1;
+  padding-left: 46px;
+}
+
+.header-title-input {
+  background: none;
+  border: none;
+  font-family: 'MinervaModern', Georgia, serif;
+  font-size: 42px;
+  line-height: 50px;
+  color: #CAC9C6;
+  font-weight: 400;
+  width: 100%;
+  cursor: text;
+  padding: 0;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.header-title-input::placeholder {
+  color: #CAC9C6;
+}
+
+.header-title-input:focus {
+  color: #000;
+}
+
+.header-title-input:focus::placeholder {
+  color: #ddd;
+}
+
 .header-search-btn {
   background: none;
   border: none;
