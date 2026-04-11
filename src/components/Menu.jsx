@@ -9,7 +9,7 @@ export default function Menu({ onClose, onSearch, onViewByCategory, onSearchByPe
   }
 
   return (
-    <div className="menu-page">
+    <div className="menu-page fade-in">
       {/* Header */}
       <div className="menu-header">
         <div className="menu-header-left">

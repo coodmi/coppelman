@@ -505,6 +505,16 @@ body {
   overflow-y: auto;
 }
 
+/* Fade-in animation for overlays */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
 .person-body {
   display: flex;
   position: relative;
@@ -515,13 +525,31 @@ body {
   padding: 0 0 40px 89px;
 }
 
+.person-back {
+  display: flex;
+  align-items: center;
+  padding: 16px 0 0 46px;
+  cursor: pointer;
+  color: #888;
+  font-size: 28px;
+  line-height: 1;
+  user-select: none;
+}
+
+.person-back:hover { color: #000; }
+
+.person-back-arrow {
+  font-size: 32px;
+  line-height: 1;
+}
+
 .person-heading {
   font-family: 'MinervaModern', Georgia, serif;
   font-size: 42px;
   line-height: 50px;
   color: #8C8888;
   font-weight: 400;
-  padding: 39px 0 30px 46px;
+  padding: 20px 0 30px 46px;
 }
 
 .person-divider {
@@ -531,7 +559,22 @@ body {
   margin-left: 46px;
 }
 
-/* Column headers */
+/* TOLD ABOUT / TOLD BY tabs */
+.person-tabs {
+  display: flex;
+  align-items: center;
+  padding: 16px 46px;
+  gap: 32px;
+}
+
+.person-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* Column headers (legacy, keep for compat) */
 .person-col-headers {
   display: flex;
   align-items: center;
@@ -560,38 +603,36 @@ body {
   line-height: 18px;
   letter-spacing: 0.24em;
   color: #000;
+  cursor: pointer;
+  user-select: none;
 }
 
 /* Checkbox */
 .person-check-box {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 22px;
   height: 22px;
   border: 1px solid #B8B8B4;
   background: #F5F5F5;
   flex-shrink: 0;
   position: relative;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.person-check-box--filled {
-  background: #666060;
-}
+.person-check-box--filled { background: #666060; }
+.person-check-box--checked { background: #666060; }
 
-.person-check-box--checked {
-  background: #666060;
-}
-
-.person-check-box--checked::after {
-  content: '';
-  position: absolute;
-  left: 3px;
-  top: 6px;
+.check-mark {
+  display: block;
   width: 5px;
   height: 9px;
   border: 2px solid #EDEEEA;
   border-top: none;
   border-left: none;
-  transform: rotate(45deg);
+  transform: rotate(45deg) translateY(-1px);
 }
 
 /* People rows */
@@ -618,11 +659,11 @@ body {
   cursor: pointer;
   padding: 0;
   text-align: left;
+  transition: opacity 0.15s;
 }
 
-.person-item--right {
-  padding-left: 10px;
-}
+.person-item:hover { opacity: 0.6; }
+.person-item--right { padding-left: 10px; }
 
 .person-name {
   font-family: 'MinervaModern', Georgia, serif;
@@ -630,10 +671,6 @@ body {
   line-height: 36px;
   color: #000;
   font-weight: 400;
-}
-
-.person-name:hover {
-  opacity: 0.6;
 }
 
 /* Keyword */
@@ -676,6 +713,27 @@ body {
 }
 
 .person-search-btn:hover { opacity: 0.75; }
+
+.person-reset-wrap {
+  text-align: right;
+  padding-right: calc(100% - 682px - 46px);
+  margin-top: 12px;
+}
+
+.person-reset-btn {
+  background: none;
+  border: none;
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #888;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.person-reset-btn:hover { color: #000; }
 
 /* ── Search Results ── */
 .results-page {

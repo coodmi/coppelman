@@ -16,7 +16,7 @@ export default function CategoryMenu({ categories = [], onClose, onSelect }) {
   }
 
   return (
-    <div className="cat-page">
+    <div className="cat-page fade-in">
       {/* Header */}
       <div className="menu-header">
         <div className="menu-header-left">
