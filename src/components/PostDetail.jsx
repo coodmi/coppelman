@@ -1,17 +1,24 @@
-import { useState } from 'react'
-
-const SLIDE_WIDTH = 687 // visible window width in px
+import { useState, useRef } from 'react'
 
 export default function PostDetail({ post, similarPosts, onBack, onSelect }) {
   const images = post.images || []
   const [offset, setOffset] = useState(0)
+  const [animating, setAnimating] = useState(false)
+  const timeoutRef = useRef(null)
 
-  // Each slide shows 3 images; step by 1
   const canNext = offset + 3 < images.length
   const canPrev = offset > 0
 
-  function next() { if (canNext) setOffset((o) => o + 1) }
-  function prev() { if (canPrev) setOffset((o) => o - 1) }
+  function go(newOffset) {
+    if (animating) return
+    setAnimating(true)
+    setOffset(newOffset)
+    clearTimeout(timeoutRef.current)
+    timeoutRef.current = setTimeout(() => setAnimating(false), 500)
+  }
+
+  function next() { if (canNext) go(offset + 1) }
+  function prev() { if (canPrev) go(offset - 1) }
 
   const visible = images.slice(offset, offset + 3)
 
@@ -48,20 +55,33 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect }) {
 
         {/* Image slider */}
         <div className="detail-slider">
-          <div className="detail-slider-track">
+          <div
+            className="detail-slider-track"
+            style={{
+              transform: `translateX(-${offset * (100 / 3)}%)`,
+              transition: animating ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
+              display: 'flex',
+              width: `${Math.max(images.length, 3) * (100 / 3)}%`,
+            }}
+          >
             {images.length === 0 ? (
-              // placeholder panels when no images
               <>
-                <div className="detail-img detail-img--large" />
-                <div className="detail-img detail-img--medium" />
-                <div className="detail-img detail-img--small" />
+                <div className="detail-img detail-img--slot0" style={{ flex: '0 0 33.333%' }} />
+                <div className="detail-img detail-img--slot1" style={{ flex: '0 0 33.333%' }} />
+                <div className="detail-img detail-img--slot2" style={{ flex: '0 0 33.333%' }} />
               </>
             ) : (
-              visible.map((src, i) => (
+              images.map((src, i) => (
                 <div
-                  key={offset + i}
-                  className={`detail-img detail-img--slot${i}`}
-                  style={{ backgroundImage: `url(${src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                  key={i}
+                  className={`detail-img detail-img--slot${Math.min(i - offset, 2)}`}
+                  style={{
+                    flex: `0 0 ${100 / Math.max(images.length, 3)}%`,
+                    backgroundImage: `url(${src})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    transition: 'opacity 0.4s ease',
+                  }}
                 />
               ))
             )}
@@ -92,7 +112,7 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect }) {
               <button
                 key={i}
                 className={`detail-dot${offset === i ? ' detail-dot--active' : ''}`}
-                onClick={() => setOffset(i)}
+                onClick={() => go(i)}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
