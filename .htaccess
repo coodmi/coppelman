@@ -1,0 +1,10 @@
+Options -MultiViews
+RewriteEngine On
+
+# Serve dashboard.html for /dashboard
+RewriteRule ^dashboard/?$ /dashboard.html [L]
+
+# Fallback to index.html for all other routes (SPA)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.html [L]
