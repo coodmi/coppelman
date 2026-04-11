@@ -1,8 +1,9 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/$USER/public_html
-    - /bin/npm install
-    - /bin/npm run build
-    - /bin/cp -r dist/. $DEPLOYPATH
-    - /bin/cp .htaccess $DEPLOYPATH/.htaccess
+    - export DEPLOYPATH=/home/buddydev/coppelman.buddydevs.com
+    - export PATH=$PATH:/usr/local/bin:/usr/bin:/opt/cpanel/ea-nodejs20/bin
+    - npm install
+    - npm run build
+    - cp -r dist/. $DEPLOYPATH
+    - cp .htaccess $DEPLOYPATH/.htaccess
