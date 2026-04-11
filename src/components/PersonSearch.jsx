@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
 export default function PersonSearch({ people = [], onClose, onSearch }) {
-  const [mode, setMode]       = useState('toldAbout') // 'toldAbout' | 'toldBy'
-  const [selected, setSelected] = useState([])
-  const [keyword, setKeyword]   = useState('')
+  const [toldBy, setToldBy]       = useState(true)
+  const [toldAbout, setToldAbout] = useState(true)
+  const [selected, setSelected]   = useState([])
+  const [keyword, setKeyword]     = useState('')
 
   function toggle(name) {
     setSelected((prev) =>
@@ -41,36 +42,24 @@ export default function PersonSearch({ people = [], onClose, onSearch }) {
         <div className="cat-sidebar" />
 
         <div className="person-content">
-          <div className="person-back" onClick={onClose}>
-            <span className="person-back-arrow">‹</span>
-          </div>
+          <button className="person-back" onClick={onClose} aria-label="Back">‹</button>
 
-          <div className="person-heading">View By Person</div>
+          <div className="person-heading">Search by Person</div>
           <div className="person-divider" />
 
-          {/* TOLD ABOUT / TOLD BY toggle */}
+          {/* TOLD BY / TOLD ABOUT checkboxes */}
           <div className="person-tabs">
-            <label className="person-tab">
-              <span
-                className={`person-check-box${mode === 'toldAbout' ? ' person-check-box--checked' : ''}`}
-                onClick={() => { setMode('toldAbout'); setSelected([]) }}
-              >
-                {mode === 'toldAbout' && <span className="check-mark" />}
+            <label className="person-tab" onClick={() => setToldBy((v) => !v)}>
+              <span className={`person-check-box${toldBy ? ' person-check-box--checked' : ''}`}>
+                {toldBy && <span className="check-mark" />}
               </span>
-              <span className="person-col-label" onClick={() => { setMode('toldAbout'); setSelected([]) }}>
-                TOLD ABOUT
-              </span>
+              <span className="person-col-label">TOLD BY</span>
             </label>
-            <label className="person-tab">
-              <span
-                className={`person-check-box${mode === 'toldBy' ? ' person-check-box--checked' : ''}`}
-                onClick={() => { setMode('toldBy'); setSelected([]) }}
-              >
-                {mode === 'toldBy' && <span className="check-mark" />}
+            <label className="person-tab" onClick={() => setToldAbout((v) => !v)}>
+              <span className={`person-check-box${toldAbout ? ' person-check-box--checked' : ''}`}>
+                {toldAbout && <span className="check-mark" />}
               </span>
-              <span className="person-col-label" onClick={() => { setMode('toldBy'); setSelected([]) }}>
-                TOLD BY
-              </span>
+              <span className="person-col-label">TOLD ABOUT</span>
             </label>
           </div>
 
