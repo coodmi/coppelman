@@ -1,8 +1,4 @@
-export default function Header({ onMenuClick, onSearch, sortBy, onSortChange, sortOptions }) {
-  function handleChange(e) {
-    onSearch(e.target.value)
-  }
-
+export default function Header({ onMenuClick, query, onSearch, sortBy, onSortChange, sortOptions }) {
   return (
     <header className="header">
       <div className="header-left">
@@ -17,7 +13,8 @@ export default function Header({ onMenuClick, onSearch, sortBy, onSortChange, so
           className="header-title-input"
           type="search"
           placeholder="Quick Search"
-          onChange={handleChange}
+          value={query}
+          onChange={(e) => onSearch(e.target.value)}
           aria-label="Search"
         />
       </div>

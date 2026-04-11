@@ -18,14 +18,13 @@ const SORT_OPTIONS = [
 ]
 
 export default function App() {
-  const [authed, setAuthed] = useState(false)
-  const [menuOpen, setMenuOpen]   = useState(false)
-  const [catOpen, setCatOpen]     = useState(false)
-  const [personOpen, setPersonOpen] = useState(false)
-  const [query, setQuery]         = useState('')
-  const [sortBy, setSortBy]       = useState('default')
+  const [authed, setAuthed]           = useState(false)
+  const [menuOpen, setMenuOpen]       = useState(false)
+  const [catOpen, setCatOpen]         = useState(false)
+  const [personOpen, setPersonOpen]   = useState(false)
+  const [query, setQuery]             = useState('')
+  const [sortBy, setSortBy]           = useState('default')
   const [selectedPost, setSelectedPost] = useState(null)
-  // re-render trigger when admin saves data
   const [dataVersion, setDataVersion] = useState(0)
   function refreshData() { setDataVersion((v) => v + 1) }
 
@@ -51,10 +50,18 @@ export default function App() {
   // Login screen
   if (!authed) {
     return (
-      <Login
-        onLogin={(pw) => {
-          if (pw === getPassword()) setAuthed(true)
-        }}
+      <Login onLogin={(pw) => { if (pw === getPassword()) setAuthed(true) }} />
+    )
+  }
+
+  // Post detail view
+  if (selectedPost) {
+    return (
+      <PostDetail
+        post={selectedPost}
+        similarPosts={allPosts.filter((p) => p.id !== selectedPost.id && p.category === selectedPost.category)}
+        onBack={() => setSelectedPost(null)}
+        onSelect={(p) => setSelectedPost(p)}
       />
     )
   }
@@ -85,32 +92,27 @@ export default function App() {
         />
       )}
 
-      {/* Pages */}
-      {selectedPost ? (
-        <PostDetail
-          post={selectedPost}
-          similarPosts={allPosts.filter((p) => p.id !== selectedPost.id && p.category === selectedPost.category)}
-          onBack={() => setSelectedPost(null)}
-          onSelect={(p) => setSelectedPost(p)}
-        />
-      ) : query.trim() ? (
+      {/* Header always visible */}
+      <Header
+        onMenuClick={() => setMenuOpen(true)}
+        query={query}
+        onSearch={(q) => setQuery(q)}
+        sortBy={sortBy}
+        onSortChange={(v) => setSortBy(v)}
+        sortOptions={SORT_OPTIONS}
+      />
+
+      {/* Results — inline below header */}
+      {query.trim() ? (
         <SearchResults
           query={query}
           posts={results}
           onBack={() => setQuery('')}
           onSelect={(p) => setSelectedPost(p)}
+          inline
         />
       ) : (
-        <>
-          <Header
-            onMenuClick={() => setMenuOpen(true)}
-            onSearch={(q) => setQuery(q)}
-            sortBy={sortBy}
-            onSortChange={(v) => setSortBy(v)}
-            sortOptions={SORT_OPTIONS}
-          />
-          <PostList posts={results} onSelect={(p) => setSelectedPost(p)} />
-        </>
+        <PostList posts={results} onSelect={(p) => setSelectedPost(p)} />
       )}
     </div>
   )
