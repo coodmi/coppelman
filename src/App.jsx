@@ -102,30 +102,13 @@ export default function App() {
         />
       ) : (
         <>
-          <Header onMenuClick={() => setMenuOpen(true)} />
-          <div className="arrange-bar">
-            <span className="arrange-label">ARRANGE BY</span>
-            <select
-              className="arrange-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              aria-label="Arrange posts by"
-            >
-              {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-          <div className="search-bar">
-            <input
-              className="search-input"
-              type="search"
-              placeholder="Search posts, authors, topics…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              aria-label="Search"
-            />
-          </div>
+          <Header
+            onMenuClick={() => setMenuOpen(true)}
+            onSearch={(q) => setQuery(q)}
+            sortBy={sortBy}
+            onSortChange={(v) => setSortBy(v)}
+            sortOptions={SORT_OPTIONS}
+          />
           <PostList posts={results} onSelect={(p) => setSelectedPost(p)} />
         </>
       )}

@@ -69,6 +69,71 @@ body {
   letter-spacing: 0;
 }
 
+/* Header right controls */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 16px;
+}
+
+.header-arrange {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.header-search-btn:hover { opacity: 1; }
+
+/* Header search form (expanded) */
+.header-search-form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 0 24px;
+  animation: fadeIn 0.2s ease both;
+}
+
+.header-search-input {
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-bottom: 1px solid #B8B8B4;
+  background: transparent;
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  padding: 0 8px;
+  color: #000;
+}
+
+.header-search-input:focus { outline: none; border-bottom-color: #000; }
+.header-search-input::placeholder { color: #B8B8B4; }
+
+.header-search-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+  padding: 4px 8px;
+  transition: color 0.15s;
+}
+
+.header-search-close:hover { color: #000; }
+
 /* ── Arrange By ── */
 .arrange-bar {
   display: flex;
