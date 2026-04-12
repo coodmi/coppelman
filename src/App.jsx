@@ -56,15 +56,18 @@ export default function App() {
     if (!query.trim()) {
       list = [...allPosts]
     } else if (personMode && typeof personMode === 'object' && (personMode.by?.length || personMode.about?.length)) {
-      // Cross-search: OR logic — posts matching any told-by OR any told-about selection
+      const hasBy    = personMode.by?.length > 0
+      const hasAbout = personMode.about?.length > 0
+
       list = allPosts.filter((post) => {
-        const byMatch = personMode.by?.length
+        const byMatch = hasBy
           ? personMode.by.some((name) => post.author?.toLowerCase().includes(name.toLowerCase()))
-          : false
-        const aboutMatch = personMode.about?.length
+          : true
+        const aboutMatch = hasAbout
           ? personMode.about.some((name) => post.related?.toLowerCase().includes(name.toLowerCase()))
-          : false
-        return byMatch || aboutMatch
+          : true
+        // AND logic: post must satisfy both conditions when both are selected
+        return byMatch && aboutMatch
       })
     } else {
       list = fuse.search(query).map((r) => r.item)
