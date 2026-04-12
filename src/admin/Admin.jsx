@@ -5,12 +5,7 @@ import AdminPeople from './AdminPeople'
 import AdminSettings from './AdminSettings'
 import './admin.css'
 
-const TABS = [
-  { id: 'Posts',      icon: '📄' },
-  { id: 'Categories', icon: '🗂️' },
-  { id: 'People',     icon: '👥' },
-  { id: 'Settings',   icon: '⚙️' },
-]
+const TABS = ['Posts', 'Categories', 'People', 'Settings']
 
 export default function Admin({ onExit }) {
   const [tab, setTab] = useState('Posts')
@@ -18,23 +13,19 @@ export default function Admin({ onExit }) {
   return (
     <div className="adm-layout">
       <aside className="adm-sidebar">
-        <div className="adm-logo">
-          Dashboard <span>ADMIN</span>
-        </div>
+        <div className="adm-logo">Admin</div>
         <nav className="adm-nav">
           {TABS.map((t) => (
             <button
-              key={t.id}
-              className={`adm-nav-item${tab === t.id ? ' adm-nav-item--active' : ''}`}
-              onClick={() => setTab(t.id)}
+              key={t}
+              className={`adm-nav-item${tab === t ? ' adm-nav-item--active' : ''}`}
+              onClick={() => setTab(t)}
             >
-              <span>{t.icon}</span> {t.id}
+              {t}
             </button>
           ))}
         </nav>
-        <button className="adm-exit" onClick={onExit}>
-          ← Back to Site
-        </button>
+        <button className="adm-exit" onClick={onExit}>← Back to Site</button>
       </aside>
 
       <main className="adm-main">

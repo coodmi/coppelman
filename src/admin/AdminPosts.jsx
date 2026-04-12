@@ -211,39 +211,37 @@ export default function AdminPosts() {
 
   return (
     <div>
-      <div className="adm-top-bar">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
         <div className="adm-section-title" style={{ margin: 0 }}>Posts</div>
         <button className="adm-btn adm-btn--primary" onClick={openNew}>+ New Post</button>
       </div>
-      <div className="adm-card">
-        <table className="adm-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Category</th>
-              <th>Date</th>
-              <th>Images</th>
-              <th></th>
+      <table className="adm-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Images</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.map((post) => (
+            <tr key={post.id}>
+              <td>{post.title}</td>
+              <td>{post.author}</td>
+              <td>{post.category}</td>
+              <td>{post.date}</td>
+              <td>{(post.images || []).length}</td>
+              <td style={{ whiteSpace: 'nowrap', display: 'flex', gap: 8 }}>
+                <button className="adm-btn adm-btn--ghost" onClick={() => openEdit(post)}>Edit</button>
+                <button className="adm-btn adm-btn--danger" onClick={() => handleDelete(post.id)}>Delete</button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => (
-              <tr key={post.id}>
-                <td data-label="Title">{post.title}</td>
-                <td data-label="Author">{post.author}</td>
-                <td data-label="Category">{post.category}</td>
-                <td data-label="Date">{post.date}</td>
-                <td data-label="Images">{(post.images || []).length}</td>
-                <td style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <button className="adm-btn adm-btn--ghost adm-btn--sm" onClick={() => openEdit(post)}>Edit</button>
-                  <button className="adm-btn adm-btn--danger adm-btn--sm" onClick={() => handleDelete(post.id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
