@@ -19,7 +19,23 @@ const SORT_OPTIONS = [
 
 export default function App() {
   const [authed, setAuthed]             = useState(false)
-  const [db, setDb]                     = useState(null)
+  // Initialize instantly from localStorage so there's no loading flash
+  const [db, setDb] = useState(() => {
+    try {
+      const raw = localStorage.getItem('qs_db')
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (parsed?.posts?.length) return parsed
+      }
+    } catch {}
+    // Return defaults immediately so page renders without waiting for API
+    return {
+      posts:      [],
+      categories: ['Golf','Polo & Equestrian','Wine','Farm & Village','Museum by Ando','The Land'],
+      people:     [],
+      password:   'admin123',
+    }
+  })
   const [menuOpen, setMenuOpen]         = useState(false)
   const [catOpen, setCatOpen]           = useState(false)
   const [personOpen, setPersonOpen]     = useState(false)
@@ -107,7 +123,7 @@ export default function App() {
 
   // Show loading until data is ready
   if (!db) {
-    return <div style={{ minHeight: '100vh', background: '#EDEEEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'EB Garamond, serif', fontSize: 20, color: '#B8B8B4', letterSpacing: '0.1em' }}>Loading…</div>
+    return null
   }
 
   // Login screen
