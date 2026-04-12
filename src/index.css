@@ -743,6 +743,30 @@ body {
   gap: 0;
 }
 
+.person-rows--two-col {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.person-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-right: 16px;
+}
+
+.person-col-heading {
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: #888;
+  padding: 8px 0 12px;
+  border-bottom: 1px solid #e0e0dc;
+  margin-bottom: 4px;
+}
+
 .person-row {
   display: flex;
   align-items: center;

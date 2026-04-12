@@ -1,39 +1,36 @@
 import { useState } from 'react'
 
 export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], onClose, onSearch }) {
-  const [mode, setMode]         = useState('toldBy')
-  const [selected, setSelected] = useState([])
-  const [keyword, setKeyword]   = useState('')
+  const [showToldBy, setShowToldBy]       = useState(true)
+  const [showToldAbout, setShowToldAbout] = useState(false)
+  const [selectedBy, setSelectedBy]       = useState([])
+  const [selectedAbout, setSelectedAbout] = useState([])
+  const [keyword, setKeyword]             = useState('')
 
-  function switchMode(newMode) {
-    setMode(newMode)
-    setSelected([])
+  function toggleBy(name) {
+    setSelectedBy((prev) => prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name])
   }
 
-  function toggle(name) {
-    setSelected((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
-    )
+  function toggleAbout(name) {
+    setSelectedAbout((prev) => prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name])
   }
 
   function handleSearch() {
-    const terms = [...selected, keyword.trim()].filter(Boolean).join(' ')
-    onSearch(terms || '', mode)
+    const terms = [...selectedBy, ...selectedAbout, keyword.trim()].filter(Boolean).join(' ')
+    onSearch(terms || '', { by: selectedBy, about: selectedAbout })
   }
 
   function handleReset() {
-    setSelected([])
+    setSelectedBy([])
+    setSelectedAbout([])
     setKeyword('')
   }
 
-  // Show list based on active mode
-  const people = mode === 'toldBy' ? toldByPeople : toldAboutPeople
-  const left   = people.filter((_, i) => i % 2 === 0)
-  const right  = people.filter((_, i) => i % 2 !== 0)
+  // Determine layout: both active = two columns, one active = single column
+  const bothActive = showToldBy && showToldAbout
 
   return (
     <div className="person-page fade-in">
-      {/* Header */}
       <div className="menu-header">
         <div className="menu-header-left">
           <button className="close-btn" onClick={onClose} aria-label="Close">
@@ -49,60 +46,108 @@ export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], 
 
         <div className="person-content">
           <button className="person-back" onClick={onClose} aria-label="Back">‹</button>
-
           <div className="person-heading">Search by Person</div>
           <div className="person-divider" />
 
-          {/* TOLD BY / TOLD ABOUT — mutually exclusive tabs */}
+          {/* Toggle tabs */}
           <div className="person-tabs">
-            <div className="person-tab" onClick={() => switchMode('toldBy')}>
-              <span className={`person-check-box${mode === 'toldBy' ? ' person-check-box--checked' : ''}`}>
-                {mode === 'toldBy' && <span className="check-mark" />}
+            <div className="person-tab" onClick={() => { setShowToldBy((v) => !v); if (showToldBy) setSelectedBy([]) }}>
+              <span className={`person-check-box${showToldBy ? ' person-check-box--checked' : ''}`}>
+                {showToldBy && <span className="check-mark" />}
               </span>
               <span className="person-col-label">TOLD BY</span>
             </div>
-            <div className="person-tab" onClick={() => switchMode('toldAbout')}>
-              <span className={`person-check-box${mode === 'toldAbout' ? ' person-check-box--checked' : ''}`}>
-                {mode === 'toldAbout' && <span className="check-mark" />}
+            <div className="person-tab" onClick={() => { setShowToldAbout((v) => !v); if (showToldAbout) setSelectedAbout([]) }}>
+              <span className={`person-check-box${showToldAbout ? ' person-check-box--checked' : ''}`}>
+                {showToldAbout && <span className="check-mark" />}
               </span>
               <span className="person-col-label">TOLD ABOUT</span>
             </div>
           </div>
 
-          {/* People grid — same list, label changes based on mode */}
-          <div className="person-rows">
-            {left.map((name, i) => (
-              <div className="person-row" key={name}>
-                <button
-                  className="person-item"
-                  onClick={() => toggle(name)}
-                  aria-pressed={selected.includes(name)}
-                >
-                  <span className={`person-check-box${selected.includes(name) ? ' person-check-box--checked' : ''}`}>
-                    {selected.includes(name) && <span className="check-mark" />}
-                  </span>
-                  <span className="person-name">{name}</span>
-                </button>
-
-                {right[i] && (
-                  <button
-                    className="person-item person-item--right"
-                    onClick={() => toggle(right[i])}
-                    aria-pressed={selected.includes(right[i])}
-                  >
-                    <span className={`person-check-box${selected.includes(right[i]) ? ' person-check-box--checked' : ''}`}>
-                      {selected.includes(right[i]) && <span className="check-mark" />}
-                    </span>
-                    <span className="person-name">{right[i]}</span>
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+          {/* People grid — two columns when both active, single when one */}
+          {(showToldBy || showToldAbout) && (
+            <div className={`person-rows${bothActive ? ' person-rows--two-col' : ''}`}>
+              {bothActive ? (
+                // Two column layout: left = told by, right = told about
+                <>
+                  <div className="person-col">
+                    <div className="person-col-heading">TOLD BY</div>
+                    {toldByPeople.map((name) => (
+                      <button key={name} className="person-item" onClick={() => toggleBy(name)}>
+                        <span className={`person-check-box${selectedBy.includes(name) ? ' person-check-box--checked' : ''}`}>
+                          {selectedBy.includes(name) && <span className="check-mark" />}
+                        </span>
+                        <span className="person-name">{name}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="person-col">
+                    <div className="person-col-heading">TOLD ABOUT</div>
+                    {toldAboutPeople.map((name) => (
+                      <button key={name} className="person-item" onClick={() => toggleAbout(name)}>
+                        <span className={`person-check-box${selectedAbout.includes(name) ? ' person-check-box--checked' : ''}`}>
+                          {selectedAbout.includes(name) && <span className="check-mark" />}
+                        </span>
+                        <span className="person-name">{name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : showToldBy ? (
+                // Single column: told by
+                (() => {
+                  const left  = toldByPeople.filter((_, i) => i % 2 === 0)
+                  const right = toldByPeople.filter((_, i) => i % 2 !== 0)
+                  return left.map((name, i) => (
+                    <div className="person-row" key={name}>
+                      <button className="person-item" onClick={() => toggleBy(name)}>
+                        <span className={`person-check-box${selectedBy.includes(name) ? ' person-check-box--checked' : ''}`}>
+                          {selectedBy.includes(name) && <span className="check-mark" />}
+                        </span>
+                        <span className="person-name">{name}</span>
+                      </button>
+                      {right[i] && (
+                        <button className="person-item person-item--right" onClick={() => toggleBy(right[i])}>
+                          <span className={`person-check-box${selectedBy.includes(right[i]) ? ' person-check-box--checked' : ''}`}>
+                            {selectedBy.includes(right[i]) && <span className="check-mark" />}
+                          </span>
+                          <span className="person-name">{right[i]}</span>
+                        </button>
+                      )}
+                    </div>
+                  ))
+                })()
+              ) : (
+                // Single column: told about
+                (() => {
+                  const left  = toldAboutPeople.filter((_, i) => i % 2 === 0)
+                  const right = toldAboutPeople.filter((_, i) => i % 2 !== 0)
+                  return left.map((name, i) => (
+                    <div className="person-row" key={name}>
+                      <button className="person-item" onClick={() => toggleAbout(name)}>
+                        <span className={`person-check-box${selectedAbout.includes(name) ? ' person-check-box--checked' : ''}`}>
+                          {selectedAbout.includes(name) && <span className="check-mark" />}
+                        </span>
+                        <span className="person-name">{name}</span>
+                      </button>
+                      {right[i] && (
+                        <button className="person-item person-item--right" onClick={() => toggleAbout(right[i])}>
+                          <span className={`person-check-box${selectedAbout.includes(right[i]) ? ' person-check-box--checked' : ''}`}>
+                            {selectedAbout.includes(right[i]) && <span className="check-mark" />}
+                          </span>
+                          <span className="person-name">{right[i]}</span>
+                        </button>
+                      )}
+                    </div>
+                  ))
+                })()
+              )}
+            </div>
+          )}
 
           <div className="person-divider" />
 
-          {/* Keyword */}
           <div className="person-keyword-wrap">
             <input
               className="person-keyword"
