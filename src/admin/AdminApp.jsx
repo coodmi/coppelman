@@ -4,11 +4,21 @@ import AdminLogin from './AdminLogin'
 import './admin.css'
 
 export default function AdminApp() {
-  const [authed, setAuthed] = useState(false)
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem('adm_auth') === '1')
 
-  if (!authed) {
-    return <AdminLogin onLogin={() => setAuthed(true)} />
+  function handleLogin() {
+    sessionStorage.setItem('adm_auth', '1')
+    setAuthed(true)
   }
 
-  return <Admin onExit={() => setAuthed(false)} />
+  function handleExit() {
+    sessionStorage.removeItem('adm_auth')
+    setAuthed(false)
+  }
+
+  if (!authed) {
+    return <AdminLogin onLogin={handleLogin} />
+  }
+
+  return <Admin onExit={handleExit} />
 }
