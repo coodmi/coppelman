@@ -229,12 +229,12 @@ export default function AdminPosts() {
         <tbody>
           {posts.map((post) => (
             <tr key={post.id}>
-              <td>{post.title}</td>
-              <td>{post.author}</td>
-              <td>{post.category}</td>
-              <td>{post.date}</td>
-              <td>{(post.images || []).length}</td>
-              <td style={{ whiteSpace: 'nowrap', display: 'flex', gap: 8 }}>
+              <td data-label="Title">{post.title}</td>
+              <td data-label="Author">{post.author}</td>
+              <td data-label="Category">{post.category}</td>
+              <td data-label="Date">{post.date}</td>
+              <td data-label="Images">{(post.images || []).length}</td>
+              <td>
                 <button className="adm-btn adm-btn--ghost" onClick={() => openEdit(post)}>Edit</button>
                 <button className="adm-btn adm-btn--danger" onClick={() => handleDelete(post.id)}>Delete</button>
               </td>

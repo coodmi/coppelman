@@ -426,37 +426,135 @@
 
 .adm-login-btn:hover { opacity: 0.75; }
 
+
 /* ── Admin Mobile Responsive ── */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+
   .adm-layout { flex-direction: column; }
 
+  /* Sticky top nav bar */
   .adm-sidebar {
     width: 100%;
     height: auto;
-    position: static;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    padding: 0;
+    z-index: 100;
   }
 
-  .adm-logo { padding: 8px 16px 8px; border-bottom: none; margin-bottom: 0; font-size: 20px; }
+  .adm-logo {
+    font-size: 20px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0;
+  }
 
-  .adm-nav { flex-direction: row; flex-wrap: wrap; flex: none; }
-  .adm-nav-item { padding: 10px 14px; font-size: 14px; }
-  .adm-nav-item--active { border-left: none; border-bottom: 3px solid #fff; }
+  /* Horizontal scrollable tab nav */
+  .adm-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0;
+    border-bottom: 1px solid #2a2a2a;
+  }
 
-  .adm-exit { padding: 10px 14px; margin-top: 0; }
+  .adm-nav::-webkit-scrollbar { display: none; }
 
-  .adm-main { padding: 20px 16px; }
+  .adm-nav-item {
+    padding: 14px 20px;
+    font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    border-left: none !important;
+  }
 
-  .adm-form { padding: 20px 16px; }
-  .adm-table th, .adm-table td { padding: 10px 10px; font-size: 13px; }
+  .adm-nav-item--active {
+    border-left: none !important;
+    border-bottom: 3px solid #fff;
+    padding-bottom: 11px;
+  }
 
-  .adm-btn { padding: 8px 14px; font-size: 13px; }
+  .adm-exit {
+    padding: 12px 20px;
+    border-top: 1px solid #2a2a2a;
+    font-size: 13px;
+  }
 
-  .adm-login-box { padding: 32px 20px; }
-  .adm-login-title { font-size: 22px; }
-  .adm-login-input { font-size: 15px; }
+  /* Main */
+  .adm-main { padding: 16px; }
+  .adm-section-title { font-size: 22px; margin-bottom: 16px; }
 
+  /* Table → card rows */
+  .adm-table { display: block; }
+  .adm-table thead { display: none; }
+  .adm-table tbody { display: block; }
+
+  .adm-table tr {
+    display: block;
+    background: #fff;
+    border: 1px solid #e8e8e4;
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border-radius: 4px;
+  }
+
+  .adm-table td {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 5px 0;
+    border: none;
+    font-size: 14px;
+  }
+
+  .adm-table td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888;
+    min-width: 68px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* Action buttons row */
+  .adm-table td:last-child {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 1px solid #f0f0ec;
+  }
+
+  .adm-table td:last-child::before { display: none; }
+  .adm-table td:last-child .adm-btn { flex: 1; text-align: center; }
+
+  /* Buttons */
+  .adm-btn { padding: 10px 16px; font-size: 14px; }
+
+  /* Form */
+  .adm-form { padding: 20px 16px; max-width: 100%; }
+  .adm-form-title { font-size: 20px; }
+  .adm-form-actions { flex-wrap: wrap; }
+  .adm-form-actions .adm-btn { flex: 1; text-align: center; padding: 12px; }
+
+  /* Inline add */
+  .adm-inline-add { flex-wrap: wrap; }
+  .adm-inline-add .adm-input { max-width: 100%; }
+
+  /* Checkbox grid */
   .adm-checkbox-list { grid-template-columns: 1fr; }
+
+  /* Login */
+  .adm-login-box { padding: 32px 20px; margin: 16px; }
+  .adm-login-title { font-size: 24px; }
+}
+
+@media (max-width: 400px) {
+  .adm-nav-item { padding: 12px 14px; font-size: 13px; }
+  .adm-main { padding: 12px; }
+  .adm-form { padding: 16px 12px; }
 }
