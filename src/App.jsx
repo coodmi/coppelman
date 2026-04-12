@@ -10,6 +10,19 @@ import SearchResults from './components/SearchResults'
 import PostDetail from './components/PostDetail'
 import { fetchAll, setCache } from './store'
 
+const AUTH_KEY = 'qs_auth_ts'
+const AUTH_DAYS = 15
+
+function isAuthValid() {
+  const ts = localStorage.getItem(AUTH_KEY)
+  if (!ts) return false
+  return Date.now() - parseInt(ts) < AUTH_DAYS * 24 * 60 * 60 * 1000
+}
+
+function setAuthStamp() {
+  localStorage.setItem(AUTH_KEY, Date.now().toString())
+}
+
 const SORT_OPTIONS = [
   { value: 'default', label: 'Default' },
   { value: 'title',   label: 'Title A–Z' },
@@ -18,7 +31,7 @@ const SORT_OPTIONS = [
 ]
 
 export default function App() {
-  const [authed, setAuthed]             = useState(false)
+  const [authed, setAuthed] = useState(() => isAuthValid())
   // Initialize instantly from localStorage so there's no loading flash
   const [db, setDb] = useState(() => {
     try {
@@ -122,7 +135,7 @@ export default function App() {
   // Login screen
   if (!authed) {
     return (
-      <Login onLogin={(pw) => { if (pw === (db.password ?? 'admin123')) setAuthed(true) }} />
+      <Login onLogin={(pw) => { if (pw === (db.password ?? 'admin123')) { setAuthStamp(); setAuthed(true) } }} />
     )
   }
 
