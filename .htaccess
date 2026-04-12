@@ -4,7 +4,7 @@ RewriteEngine On
 # Serve dashboard.html for /dashboard
 RewriteRule ^dashboard/?$ /dashboard.html [L]
 
-# Don't rewrite API calls
+# Don't rewrite API calls or uploaded files
 RewriteRule ^api/ - [L]
 
 # Fallback to index.html for all other routes (SPA)

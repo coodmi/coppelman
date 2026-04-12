@@ -92,29 +92,26 @@ export default function AdminPosts() {
 
   function set(key, val) { setForm((f) => ({ ...f, [key]: val })) }
 
-  function handleImageUpload(e) {
+  async function handleImageUpload(e) {
     const files = Array.from(e.target.files)
-    files.forEach((file) => {
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        // Compress image via canvas before storing
-        const img = new Image()
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          const MAX = 800
-          let w = img.width, h = img.height
-          if (w > MAX) { h = Math.round(h * MAX / w); w = MAX }
-          if (h > MAX) { w = Math.round(w * MAX / h); h = MAX }
-          canvas.width = w
-          canvas.height = h
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-          const compressed = canvas.toDataURL('image/jpeg', 0.7)
-          setForm((f) => ({ ...f, images: [...(f.images || []), compressed] }))
+    for (const file of files) {
+      const formData = new FormData()
+      formData.append('image', file)
+      try {
+        const res  = await fetch('/api/upload.php', { method: 'POST', body: formData })
+        const data = await res.json()
+        if (data.url) {
+          setForm((f) => ({ ...f, images: [...(f.images || []), data.url] }))
         }
-        img.src = ev.target.result
+      } catch {
+        // Fallback to base64 if upload fails
+        const reader = new FileReader()
+        reader.onload = (ev) => {
+          setForm((f) => ({ ...f, images: [...(f.images || []), ev.target.result] }))
+        }
+        reader.readAsDataURL(file)
       }
-      reader.readAsDataURL(file)
-    })
+    }
     e.target.value = ''
   }
 
