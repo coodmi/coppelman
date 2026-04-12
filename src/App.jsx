@@ -8,7 +8,7 @@ import CategoryMenu from './components/CategoryMenu'
 import PersonSearch from './components/PersonSearch'
 import SearchResults from './components/SearchResults'
 import PostDetail from './components/PostDetail'
-import { fetchAll, setCache, getPosts, getCategories, getToldBy, getToldAbout, getPassword } from './store'
+import { fetchAll, setCache } from './store'
 
 const SORT_OPTIONS = [
   { value: 'default', label: 'Default' },
@@ -18,36 +18,29 @@ const SORT_OPTIONS = [
 ]
 
 export default function App() {
-  const [authed, setAuthed]           = useState(false)
-  const [loaded, setLoaded]           = useState(false)
-  const [menuOpen, setMenuOpen]       = useState(false)
-  const [catOpen, setCatOpen]         = useState(false)
-  const [personOpen, setPersonOpen]   = useState(false)
-  const [query, setQuery]             = useState('')
-  const [personMode, setPersonMode]   = useState('toldBy')
-  const [sortBy, setSortBy]           = useState('default')
+  const [authed, setAuthed]             = useState(false)
+  const [db, setDb]                     = useState(null)
+  const [menuOpen, setMenuOpen]         = useState(false)
+  const [catOpen, setCatOpen]           = useState(false)
+  const [personOpen, setPersonOpen]     = useState(false)
+  const [query, setQuery]               = useState('')
+  const [personMode, setPersonMode]     = useState({})
+  const [sortBy, setSortBy]             = useState('default')
   const [selectedPost, setSelectedPost] = useState(null)
-  const [dataVersion, setDataVersion] = useState(0)
-  function refreshData() { setDataVersion((v) => v + 1) }
 
-  // Load all data from server on mount
+  function refreshData() {
+    fetchAll().then((fresh) => { setCache(fresh); setDb(fresh) })
+  }
+
+  // Load all data on mount
   useEffect(() => {
-    fetchAll().then((db) => {
-      setCache(db)
-      setLoaded(true)
-    })
+    fetchAll().then((fresh) => { setCache(fresh); setDb(fresh) })
   }, [])
 
-  // Reload when dataVersion changes (after admin saves)
-  useEffect(() => {
-    if (dataVersion === 0) return
-    fetchAll().then((db) => setCache(db))
-  }, [dataVersion])
-
-  const allPosts      = useMemo(() => getPosts(),      [dataVersion, loaded])
-  const categories    = useMemo(() => getCategories(), [dataVersion, loaded])
-  const toldByList    = useMemo(() => getToldBy(),     [dataVersion, loaded])
-  const toldAboutList = useMemo(() => getToldAbout(),  [dataVersion, loaded])
+  const allPosts      = db?.posts      ?? []
+  const categories    = db?.categories ?? []
+  const toldByList    = useMemo(() => [...new Set((db?.posts ?? []).map(p => p.author).filter(Boolean).map(n => n.trim()))].sort(), [db])
+  const toldAboutList = useMemo(() => [...new Set((db?.posts ?? []).flatMap(p => (p.related || '').split(/\s{2,}|\n|,/).map(n => n.trim())).filter(n => n.length > 0))].sort(), [db])
 
   const fuse = useMemo(() => new Fuse(allPosts, {
     keys: ['title', 'author', 'category', 'related'],
@@ -112,10 +105,15 @@ export default function App() {
     return list
   }, [query, personMode, sortBy, allPosts, fuse, fuseToldBy, fuseToldAbout])
 
+  // Show loading until data is ready
+  if (!db) {
+    return <div style={{ minHeight: '100vh', background: '#EDEEEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'EB Garamond, serif', fontSize: 20, color: '#B8B8B4', letterSpacing: '0.1em' }}>Loading…</div>
+  }
+
   // Login screen
   if (!authed) {
     return (
-      <Login onLogin={(pw) => { if (pw === getPassword()) setAuthed(true) }} />
+      <Login onLogin={(pw) => { if (pw === (db.password ?? 'admin123')) setAuthed(true) }} />
     )
   }
 
