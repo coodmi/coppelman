@@ -1,10 +1,15 @@
 import { useState } from 'react'
 
 export default function PersonSearch({ people = [], onClose, onSearch }) {
-  const [toldBy, setToldBy]       = useState(true)
-  const [toldAbout, setToldAbout] = useState(true)
-  const [selected, setSelected]   = useState([])
-  const [keyword, setKeyword]     = useState('')
+  // mode: 'toldBy' | 'toldAbout'
+  const [mode, setMode]         = useState('toldBy')
+  const [selected, setSelected] = useState([])
+  const [keyword, setKeyword]   = useState('')
+
+  function switchMode(newMode) {
+    setMode(newMode)
+    setSelected([]) // clear selection when switching
+  }
 
   function toggle(name) {
     setSelected((prev) =>
@@ -14,7 +19,7 @@ export default function PersonSearch({ people = [], onClose, onSearch }) {
 
   function handleSearch() {
     const terms = [...selected, keyword.trim()].filter(Boolean).join(' ')
-    onSearch(terms || '')
+    onSearch(terms || '', mode)
   }
 
   function handleReset() {
@@ -47,23 +52,23 @@ export default function PersonSearch({ people = [], onClose, onSearch }) {
           <div className="person-heading">Search by Person</div>
           <div className="person-divider" />
 
-          {/* TOLD BY / TOLD ABOUT checkboxes */}
+          {/* TOLD BY / TOLD ABOUT — mutually exclusive tabs */}
           <div className="person-tabs">
-            <label className="person-tab" onClick={() => setToldBy((v) => !v)}>
-              <span className={`person-check-box${toldBy ? ' person-check-box--checked' : ''}`}>
-                {toldBy && <span className="check-mark" />}
+            <div className="person-tab" onClick={() => switchMode('toldBy')}>
+              <span className={`person-check-box${mode === 'toldBy' ? ' person-check-box--checked' : ''}`}>
+                {mode === 'toldBy' && <span className="check-mark" />}
               </span>
               <span className="person-col-label">TOLD BY</span>
-            </label>
-            <label className="person-tab" onClick={() => setToldAbout((v) => !v)}>
-              <span className={`person-check-box${toldAbout ? ' person-check-box--checked' : ''}`}>
-                {toldAbout && <span className="check-mark" />}
+            </div>
+            <div className="person-tab" onClick={() => switchMode('toldAbout')}>
+              <span className={`person-check-box${mode === 'toldAbout' ? ' person-check-box--checked' : ''}`}>
+                {mode === 'toldAbout' && <span className="check-mark" />}
               </span>
               <span className="person-col-label">TOLD ABOUT</span>
-            </label>
+            </div>
           </div>
 
-          {/* People grid */}
+          {/* People grid — same list, label changes based on mode */}
           <div className="person-rows">
             {left.map((name, i) => (
               <div className="person-row" key={name}>

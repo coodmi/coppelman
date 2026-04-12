@@ -23,6 +23,7 @@ export default function App() {
   const [catOpen, setCatOpen]         = useState(false)
   const [personOpen, setPersonOpen]   = useState(false)
   const [query, setQuery]             = useState('')
+  const [personMode, setPersonMode]   = useState('toldBy')
   const [sortBy, setSortBy]           = useState('default')
   const [selectedPost, setSelectedPost] = useState(null)
   const [dataVersion, setDataVersion] = useState(0)
@@ -37,15 +38,32 @@ export default function App() {
     threshold: 0.35,
   }), [allPosts])
 
+  const fuseToldBy = useMemo(() => new Fuse(allPosts, {
+    keys: ['author'],
+    threshold: 0.3,
+  }), [allPosts])
+
+  const fuseToldAbout = useMemo(() => new Fuse(allPosts, {
+    keys: ['related'],
+    threshold: 0.3,
+  }), [allPosts])
+
   const results = useMemo(() => {
-    let list = query.trim()
-      ? fuse.search(query).map((r) => r.item)
-      : [...allPosts]
+    let list
+    if (!query.trim()) {
+      list = [...allPosts]
+    } else if (personMode === 'toldBy') {
+      list = fuseToldBy.search(query).map((r) => r.item)
+    } else if (personMode === 'toldAbout') {
+      list = fuseToldAbout.search(query).map((r) => r.item)
+    } else {
+      list = fuse.search(query).map((r) => r.item)
+    }
     if (sortBy === 'title')  list.sort((a, b) => a.title.localeCompare(b.title))
     if (sortBy === 'author') list.sort((a, b) => a.author.localeCompare(b.author))
     if (sortBy === 'date')   list.sort((a, b) => b.date.localeCompare(a.date))
     return list
-  }, [query, sortBy, allPosts, fuse])
+  }, [query, personMode, sortBy, allPosts, fuse, fuseToldBy, fuseToldAbout])
 
   // Login screen
   if (!authed) {
@@ -88,7 +106,12 @@ export default function App() {
         <PersonSearch
           people={people}
           onClose={() => setPersonOpen(false)}
-          onSearch={(terms) => { setQuery(terms); setPersonOpen(false) }}
+          onSearch={(terms, mode) => {
+            // prefix with field hint so results page can filter correctly
+            setQuery(terms)
+            setPersonMode(mode || 'toldBy')
+            setPersonOpen(false)
+          }}
         />
       )}
 
@@ -96,7 +119,7 @@ export default function App() {
       <Header
         onMenuClick={() => setMenuOpen(true)}
         query={query}
-        onSearch={(q) => setQuery(q)}
+        onSearch={(q) => { setQuery(q); setPersonMode('') }}
         sortBy={sortBy}
         onSortChange={(v) => setSortBy(v)}
         sortOptions={SORT_OPTIONS}
