@@ -45,6 +45,8 @@
 
 .adm-nav-item:hover { background: #2a2a2a; color: #fff; }
 .adm-nav-item--active { background: #2a2a2a; color: #fff; border-left: 3px solid #fff; }
+.adm-nav-item:focus { outline: none; }
+.adm-exit:focus { outline: none; }
 
 .adm-exit {
   background: none;
