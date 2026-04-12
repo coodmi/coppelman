@@ -1,4 +1,8 @@
 /* ── Admin Layout ── */
+* { box-sizing: border-box; }
+
+.adm-layout *:focus { outline: none; }
+.adm-layout button:focus { outline: none; box-shadow: none; }
 .adm-layout {
   display: flex;
   min-height: 100vh;
