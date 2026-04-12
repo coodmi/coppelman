@@ -18,12 +18,20 @@ html, body { margin: 0; padding: 0; height: 100%; }
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 32px 0;
+  padding: 32px 0 0;
   flex-shrink: 0;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   height: 100vh;
-  min-height: 100vh;
+  overflow: hidden;
+}
+
+.adm-main {
+  flex: 1;
+  padding: 40px 48px;
+  overflow-y: auto;
+  margin-left: 220px;
 }
 
 .adm-logo {
@@ -66,6 +74,8 @@ html, body { margin: 0; padding: 0; height: 100%; }
   padding: 14px 28px;
   cursor: pointer;
   margin-top: auto;
+  border-top: 1px solid #333;
+  flex-shrink: 0;
 }
 
 .adm-exit:hover { color: #aaa; }
@@ -441,7 +451,6 @@ html, body { margin: 0; padding: 0; height: 100%; }
 
   .adm-layout { flex-direction: column; }
 
-  /* Sticky top nav bar */
   .adm-sidebar {
     width: 100%;
     height: auto;
@@ -450,6 +459,12 @@ html, body { margin: 0; padding: 0; height: 100%; }
     flex-direction: column;
     padding: 0;
     z-index: 100;
+    overflow: hidden;
+  }
+
+  .adm-main {
+    padding: 16px;
+    margin-left: 0;
   }
 
   .adm-logo {
