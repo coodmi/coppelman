@@ -9,16 +9,27 @@ import './admin.css'
 const TABS = ['Posts', 'Categories', 'People', 'Settings']
 
 export default function Admin({ onExit }) {
-  const [tab, setTab]       = useState('Posts')
-  const [ready, setReady]   = useState(false)
+  const [tab, setTab]     = useState('Posts')
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
+    // Check if we already have cached data
+    try {
+      const raw = localStorage.getItem('qs_db')
+      if (raw && JSON.parse(raw)?.posts) {
+        const db = JSON.parse(raw)
+        setCache(db)
+        setReady(true)
+        // Still fetch fresh data in background
+        fetchAll().then((fresh) => setCache(fresh))
+        return
+      }
+    } catch {}
+    // No cache — fetch from API
     fetchAll().then((db) => { setCache(db); setReady(true) })
   }, [])
 
-  if (!ready) {
-    return <div style={{ padding: 40, color: '#888', fontFamily: 'inherit' }}>Loading…</div>
-  }
+  if (!ready) return null
 
   return (
     <div className="adm-layout">
