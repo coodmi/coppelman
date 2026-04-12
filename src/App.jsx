@@ -37,7 +37,7 @@ export default function App() {
 
   const fuse = useMemo(() => new Fuse(allPosts, {
     keys: ['title', 'author', 'category', 'related'],
-    threshold: 0.35,
+    threshold: 0.3,
   }), [allPosts])
 
   const fuseToldBy = useMemo(() => new Fuse(allPosts, {
@@ -100,6 +100,7 @@ export default function App() {
       {catOpen && (
         <CategoryMenu
           categories={categories}
+          posts={allPosts}
           onClose={() => setCatOpen(false)}
           onSelect={(cat) => { setQuery(cat); setCatOpen(false) }}
         />

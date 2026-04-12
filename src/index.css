@@ -563,15 +563,9 @@ body {
 /* Subcategories */
 .cat-subs {
   display: flex;
+  flex-direction: column;
   gap: 0;
   padding: 8px 46px 24px;
-}
-
-.cat-subs-col {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  flex: 1;
 }
 
 .cat-sub-item {
@@ -584,11 +578,18 @@ body {
   letter-spacing: 0.08em;
   color: #000;
   text-align: left;
-  padding: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #e8e8e4;
+  transition: opacity 0.15s;
 }
 
-.cat-sub-item:hover {
-  text-decoration: underline;
+.cat-sub-item:hover { opacity: 0.6; }
+
+.cat-sub-item--all {
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: #888;
+  border-bottom: 1px solid #e8e8e4;
 }
 
 /* ── Search by Person ── */
