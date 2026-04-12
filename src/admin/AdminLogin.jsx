@@ -22,6 +22,7 @@ export default function AdminLogin({ onLogin }) {
     <div className="adm-login-page">
       <div className="adm-login-box">
         <div className="adm-login-title">Admin Dashboard</div>
+        <div className="adm-login-subtitle">Sign in to manage your content</div>
         <form onSubmit={handleSubmit} className="adm-login-form">
           <label className="adm-login-label" htmlFor="adm-email">Email</label>
           <input
