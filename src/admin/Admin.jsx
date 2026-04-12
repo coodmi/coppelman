@@ -34,7 +34,10 @@ export default function Admin({ onExit }) {
   return (
     <div className="adm-layout">
       <aside className="adm-sidebar">
-        <div className="adm-logo" style={{ cursor: 'pointer' }} onClick={() => setTab('Posts')}>Admin</div>
+        <div className="adm-logo" style={{ cursor: 'pointer' }} onClick={() => {
+          setTab('Posts')
+          fetchAll().then((db) => { setCache(db); setReady(true) })
+        }}>Admin</div>
         <nav className="adm-nav">
           {TABS.map((t) => (
             <button
