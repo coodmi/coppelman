@@ -7,3 +7,5 @@ deployment:
     - npm run build
     - cp -r dist/. $DEPLOYPATH
     - cp .htaccess $DEPLOYPATH/.htaccess
+    - mkdir -p $DEPLOYPATH/api
+    - cp api/data.php $DEPLOYPATH/api/data.php
