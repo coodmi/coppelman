@@ -10,17 +10,28 @@ import SearchResults from './components/SearchResults'
 import PostDetail from './components/PostDetail'
 import { fetchAll, setCache } from './store'
 
-const AUTH_KEY = 'qs_auth_ts'
+const AUTH_KEY  = 'qs_auth_ts'
 const AUTH_DAYS = 15
 
 function isAuthValid() {
+  // Check cookie first, fallback to localStorage
+  const cookie = document.cookie.split(';').find(c => c.trim().startsWith(AUTH_KEY + '='))
+  if (cookie) {
+    const ts = cookie.split('=')[1]
+    if (ts && Date.now() - parseInt(ts) < AUTH_DAYS * 24 * 60 * 60 * 1000) return true
+  }
+  // localStorage fallback
   const ts = localStorage.getItem(AUTH_KEY)
   if (!ts) return false
   return Date.now() - parseInt(ts) < AUTH_DAYS * 24 * 60 * 60 * 1000
 }
 
 function setAuthStamp() {
-  localStorage.setItem(AUTH_KEY, Date.now().toString())
+  const ts   = Date.now().toString()
+  const days = AUTH_DAYS
+  const exp  = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = `${AUTH_KEY}=${ts}; expires=${exp}; path=/; SameSite=Lax`
+  try { localStorage.setItem(AUTH_KEY, ts) } catch {}
 }
 
 const SORT_OPTIONS = [
