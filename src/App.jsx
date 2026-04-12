@@ -141,6 +141,10 @@ export default function App() {
         similarPosts={allPosts.filter((p) => p.id !== selectedPost.id && p.category === selectedPost.category)}
         onBack={() => setSelectedPost(null)}
         onSelect={(p) => setSelectedPost(p)}
+        onSearch={(q) => { setQuery(q); setSelectedPost(null) }}
+        sortBy={sortBy}
+        onSortChange={(v) => setSortBy(v)}
+        sortOptions={SORT_OPTIONS}
       />
     )
   }

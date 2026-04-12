@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
+import Header from './Header'
 
-export default function PostDetail({ post, similarPosts, onBack, onSelect }) {
+export default function PostDetail({ post, similarPosts, onBack, onSelect, onSearch, sortBy, onSortChange, sortOptions }) {
   const images = post.images || []
   const [offset, setOffset] = useState(0)
   const [animating, setAnimating] = useState(false)
@@ -24,16 +25,14 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect }) {
 
   return (
     <div className="detail-page">
-      {/* Header */}
-      <div className="header">
-        <div className="header-left">
-          <button className="hamburger" aria-label="Back" onClick={onBack}>
-            <span />
-            <span />
-          </button>
-        </div>
-        <div className="header-title">Quick Search</div>
-      </div>
+      <Header
+        onMenuClick={onBack}
+        query=""
+        onSearch={(q) => { if (q.trim()) onSearch(q) }}
+        sortBy={sortBy}
+        onSortChange={onSortChange}
+        sortOptions={sortOptions}
+      />
 
       <div className="detail-body">
         <h1 className="detail-title">{post.title}</h1>
