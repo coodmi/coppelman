@@ -47,6 +47,7 @@ export default function Admin({ onExit }) {
           ))}
         </nav>
         <button className="adm-exit" onClick={onExit}>← Back to Site</button>
+        <a className="adm-exit" href="/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'block' }}>↗ Visit Site</a>
       </aside>
 
       <main className="adm-main">
