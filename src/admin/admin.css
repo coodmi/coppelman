@@ -425,3 +425,38 @@
 }
 
 .adm-login-btn:hover { opacity: 0.75; }
+
+/* ── Admin Mobile Responsive ── */
+@media (max-width: 600px) {
+  .adm-layout { flex-direction: column; }
+
+  .adm-sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+
+  .adm-logo { padding: 8px 16px 8px; border-bottom: none; margin-bottom: 0; font-size: 20px; }
+
+  .adm-nav { flex-direction: row; flex-wrap: wrap; flex: none; }
+  .adm-nav-item { padding: 10px 14px; font-size: 14px; }
+  .adm-nav-item--active { border-left: none; border-bottom: 3px solid #fff; }
+
+  .adm-exit { padding: 10px 14px; margin-top: 0; }
+
+  .adm-main { padding: 20px 16px; }
+
+  .adm-form { padding: 20px 16px; }
+  .adm-table th, .adm-table td { padding: 10px 10px; font-size: 13px; }
+
+  .adm-btn { padding: 8px 14px; font-size: 13px; }
+
+  .adm-login-box { padding: 32px 20px; }
+  .adm-login-title { font-size: 22px; }
+  .adm-login-input { font-size: 15px; }
+
+  .adm-checkbox-list { grid-template-columns: 1fr; }
+}
