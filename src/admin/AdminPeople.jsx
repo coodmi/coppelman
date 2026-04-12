@@ -6,20 +6,20 @@ export default function AdminPeople() {
   const [input, setInput] = useState('')
   const [saved, setSaved] = useState(false)
 
-  function add() {
+  async function add() {
     const val = input.trim()
     if (!val || people.includes(val)) return
     const updated = [...people, val]
     setPeople(updated)
-    savePeople(updated)
+    await savePeople(updated)
     setInput('')
     flash()
   }
 
-  function remove(person) {
+  async function remove(person) {
     const updated = people.filter((p) => p !== person)
     setPeople(updated)
-    savePeople(updated)
+    await savePeople(updated)
     flash()
   }
 

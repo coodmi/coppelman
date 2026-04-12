@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { getPosts, getCategories, getPeople, addPost, updatePost, deletePost, savePosts } from '../store'
+import { getPosts, getCategories, getPeople, addPost, updatePost, deletePost } from '../store'
 
 function MultiSelect({ people, selected, onChange }) {
   const [open, setOpen] = useState(false)
@@ -71,30 +71,22 @@ export default function AdminPosts() {
 
   function cancel() { setEditing(null) }
 
-  function handleSave() {
+  async function handleSave() {
     if (!form.title.trim()) return
     const saved = { ...form, related: form.related.join('  ') }
-    let ok
     if (editing === 'new') {
-      const newPost = { ...saved, id: Date.now() }
-      const all = [...getPosts(), newPost]
-      ok = savePosts(all)
+      await addPost(saved)
     } else {
-      const all = getPosts().map((p) => (p.id === editing.id ? { ...editing, ...saved } : p))
-      ok = savePosts(all)
+      await updatePost({ ...editing, ...saved })
     }
     refresh()
-    if (ok === false) {
-      setSaveError(true)
-    } else {
-      setSaveError(false)
-      setEditing(null)
-    }
+    setSaveError(false)
+    setEditing(null)
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
     if (!confirm('Delete this post?')) return
-    deletePost(id)
+    await deletePost(id)
     refresh()
   }
 

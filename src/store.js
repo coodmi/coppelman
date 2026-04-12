@@ -1,9 +1,6 @@
 import initialPosts from './data/posts'
 
-const POSTS_KEY      = 'qs_posts'
-const CATS_KEY       = 'qs_categories'
-const PEOPLE_KEY     = 'qs_people'
-const PASS_KEY       = 'qs_password'
+const API = '/api/data.php'
 
 const DEFAULT_CATEGORIES = [
   'Golf', 'Polo & Equestrian', 'Wine', 'Farm & Village', 'Museum by Ando', 'The Land',
@@ -15,69 +12,96 @@ const DEFAULT_PEOPLE = [
   'Tadao Ando', 'Kerry Hill',
 ]
 
-function load(key, fallback) {
+// ── Async API calls ──────────────────────────────────────────────
+
+export async function fetchAll() {
   try {
-    const raw = localStorage.getItem(key)
-    return raw ? JSON.parse(raw) : fallback
-  } catch { return fallback }
+    const res = await fetch(`${API}?key=all`)
+    const db  = await res.json()
+    // Seed posts from initial data if server has none
+    if (!db.posts || db.posts.length === 0) {
+      db.posts = initialPosts
+      await saveRemote('posts', initialPosts)
+    }
+    return db
+  } catch {
+    return {
+      posts:      initialPosts,
+      categories: DEFAULT_CATEGORIES,
+      people:     DEFAULT_PEOPLE,
+      password:   'admin123',
+    }
+  }
 }
 
-function save(key, value) {
-  localStorage.setItem(key, JSON.stringify(value))
+async function saveRemote(key, data) {
+  try {
+    await fetch(API, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ key, data }),
+    })
+  } catch (e) {
+    console.error('Save failed', e)
+  }
 }
 
-export function getPosts()        { return load(POSTS_KEY, initialPosts) }
-export function getCategories()  { return load(CATS_KEY, DEFAULT_CATEGORIES) }
-export function getPeople()      { return load(PEOPLE_KEY, DEFAULT_PEOPLE) }
+// ── Sync helpers (used by admin components) ──────────────────────
+// These return cached values from the last fetchAll, stored in module-level cache
+
+let _cache = null
+
+export function setCache(db) { _cache = db }
+
+export function getPosts()      { return _cache?.posts      ?? initialPosts }
+export function getCategories() { return _cache?.categories ?? DEFAULT_CATEGORIES }
+export function getPeople()     { return _cache?.people     ?? DEFAULT_PEOPLE }
+export function getPassword()   { return _cache?.password   ?? 'admin123' }
+
 export function getToldBy() {
   const posts = getPosts()
-  const names = [...new Set(
-    posts
-      .map(p => p.author)
-      .filter(Boolean)
-      .map(n => n.trim())
-      .filter(n => n.length > 0)
-  )].sort()
-  return names
+  return [...new Set(posts.map(p => p.author).filter(Boolean).map(n => n.trim()))].sort()
 }
 
 export function getToldAbout() {
   const posts = getPosts()
-  const names = [...new Set(
-    posts
-      .flatMap(p => (p.related || '').split(/\s{2,}|\n|,/).map(n => n.trim()))
-      .filter(n => n.length > 0)
+  return [...new Set(
+    posts.flatMap(p => (p.related || '').split(/\s{2,}|\n|,/).map(n => n.trim())).filter(n => n.length > 0)
   )].sort()
-  return names
 }
-export function getPassword()    { return localStorage.getItem(PASS_KEY) || 'admin123' }
 
-export function savePosts(posts) {
-  try {
-    save(POSTS_KEY, posts)
-    return true
-  } catch (e) {
-    // localStorage quota exceeded — strip images and retry
-    const stripped = posts.map((p) => ({ ...p, images: (p.images || []).slice(0, 2) }))
-    try { save(POSTS_KEY, stripped) } catch {}
-    return false
-  }
+export async function savePosts(posts) {
+  _cache = { ..._cache, posts }
+  await saveRemote('posts', posts)
+  return true
 }
-export function saveCategories(cats)       { save(CATS_KEY, cats) }
-export function savePeople(people)         { save(PEOPLE_KEY, people) }
-export function savePassword(pw)           { localStorage.setItem(PASS_KEY, pw) }
 
-export function addPost(post) {
-  const posts = getPosts()
+export async function saveCategories(cats) {
+  _cache = { ..._cache, categories: cats }
+  await saveRemote('categories', cats)
+}
+
+export async function savePeople(people) {
+  _cache = { ..._cache, people }
+  await saveRemote('people', people)
+}
+
+export async function savePassword(pw) {
+  _cache = { ..._cache, password: pw }
+  await saveRemote('password', pw)
+}
+
+export async function addPost(post) {
+  const posts  = getPosts()
   const newPost = { ...post, id: Date.now() }
-  savePosts([...posts, newPost])
+  await savePosts([...posts, newPost])
   return newPost
 }
 
-export function updatePost(updated) {
-  savePosts(getPosts().map((p) => (p.id === updated.id ? updated : p)))
+export async function updatePost(updated) {
+  await savePosts(getPosts().map(p => p.id === updated.id ? updated : p))
 }
 
-export function deletePost(id) {
-  savePosts(getPosts().filter((p) => p.id !== id))
+export async function deletePost(id) {
+  await savePosts(getPosts().filter(p => p.id !== id))
 }

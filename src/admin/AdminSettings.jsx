@@ -50,11 +50,11 @@ export default function AdminSettings() {
   const [confirm, setConfirm] = useState('')
   const [msg, setMsg]         = useState(null)
 
-  function handleSave() {
+  async function handleSave() {
     if (current !== getPassword()) { setMsg({ type: 'error', text: 'Current password is incorrect.' }); return }
     if (!next.trim())              { setMsg({ type: 'error', text: 'New password cannot be empty.' }); return }
     if (next !== confirm)          { setMsg({ type: 'error', text: 'Passwords do not match.' }); return }
-    savePassword(next)
+    await savePassword(next)
     setCurrent(''); setNext(''); setConfirm('')
     setMsg({ type: 'success', text: 'Password updated.' })
   }

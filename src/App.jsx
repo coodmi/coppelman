@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Fuse from 'fuse.js'
 import Header from './components/Header'
 import PostList from './components/PostList'
@@ -8,7 +8,7 @@ import CategoryMenu from './components/CategoryMenu'
 import PersonSearch from './components/PersonSearch'
 import SearchResults from './components/SearchResults'
 import PostDetail from './components/PostDetail'
-import { getPosts, getCategories, getPeople, getToldBy, getToldAbout, getPassword } from './store'
+import { fetchAll, setCache, getPosts, getCategories, getToldBy, getToldAbout, getPassword } from './store'
 
 const SORT_OPTIONS = [
   { value: 'default', label: 'Default' },
@@ -19,6 +19,7 @@ const SORT_OPTIONS = [
 
 export default function App() {
   const [authed, setAuthed]           = useState(false)
+  const [loaded, setLoaded]           = useState(false)
   const [menuOpen, setMenuOpen]       = useState(false)
   const [catOpen, setCatOpen]         = useState(false)
   const [personOpen, setPersonOpen]   = useState(false)
@@ -29,11 +30,24 @@ export default function App() {
   const [dataVersion, setDataVersion] = useState(0)
   function refreshData() { setDataVersion((v) => v + 1) }
 
-  const allPosts      = useMemo(() => getPosts(),      [dataVersion])
-  const categories    = useMemo(() => getCategories(), [dataVersion])
-  const people        = useMemo(() => getPeople(),     [dataVersion])
-  const toldByList    = useMemo(() => getToldBy(),     [dataVersion])
-  const toldAboutList = useMemo(() => getToldAbout(),  [dataVersion])
+  // Load all data from server on mount
+  useEffect(() => {
+    fetchAll().then((db) => {
+      setCache(db)
+      setLoaded(true)
+    })
+  }, [])
+
+  // Reload when dataVersion changes (after admin saves)
+  useEffect(() => {
+    if (dataVersion === 0) return
+    fetchAll().then((db) => setCache(db))
+  }, [dataVersion])
+
+  const allPosts      = useMemo(() => getPosts(),      [dataVersion, loaded])
+  const categories    = useMemo(() => getCategories(), [dataVersion, loaded])
+  const toldByList    = useMemo(() => getToldBy(),     [dataVersion, loaded])
+  const toldAboutList = useMemo(() => getToldAbout(),  [dataVersion, loaded])
 
   const fuse = useMemo(() => new Fuse(allPosts, {
     keys: ['title', 'author', 'category', 'related'],

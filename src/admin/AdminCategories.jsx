@@ -6,20 +6,20 @@ export default function AdminCategories() {
   const [input, setInput] = useState('')
   const [saved, setSaved] = useState(false)
 
-  function add() {
+  async function add() {
     const val = input.trim()
     if (!val || cats.includes(val)) return
     const updated = [...cats, val]
     setCats(updated)
-    saveCategories(updated)
+    await saveCategories(updated)
     setInput('')
     flash()
   }
 
-  function remove(cat) {
+  async function remove(cat) {
     const updated = cats.filter((c) => c !== cat)
     setCats(updated)
-    saveCategories(updated)
+    await saveCategories(updated)
     flash()
   }
 
