@@ -8,7 +8,7 @@ import CategoryMenu from './components/CategoryMenu'
 import PersonSearch from './components/PersonSearch'
 import SearchResults from './components/SearchResults'
 import PostDetail from './components/PostDetail'
-import { getPosts, getCategories, getPeople, getPassword } from './store'
+import { getPosts, getCategories, getPeople, getToldBy, getToldAbout, getPassword } from './store'
 
 const SORT_OPTIONS = [
   { value: 'default', label: 'Default' },
@@ -29,9 +29,11 @@ export default function App() {
   const [dataVersion, setDataVersion] = useState(0)
   function refreshData() { setDataVersion((v) => v + 1) }
 
-  const allPosts   = useMemo(() => getPosts(),      [dataVersion])
-  const categories = useMemo(() => getCategories(), [dataVersion])
-  const people     = useMemo(() => getPeople(),     [dataVersion])
+  const allPosts      = useMemo(() => getPosts(),      [dataVersion])
+  const categories    = useMemo(() => getCategories(), [dataVersion])
+  const people        = useMemo(() => getPeople(),     [dataVersion])
+  const toldByList    = useMemo(() => getToldBy(),     [dataVersion])
+  const toldAboutList = useMemo(() => getToldAbout(),  [dataVersion])
 
   const fuse = useMemo(() => new Fuse(allPosts, {
     keys: ['title', 'author', 'category', 'related'],
@@ -104,10 +106,10 @@ export default function App() {
       )}
       {personOpen && (
         <PersonSearch
-          people={people}
+          toldByPeople={toldByList}
+          toldAboutPeople={toldAboutList}
           onClose={() => setPersonOpen(false)}
           onSearch={(terms, mode) => {
-            // prefix with field hint so results page can filter correctly
             setQuery(terms)
             setPersonMode(mode || 'toldBy')
             setPersonOpen(false)

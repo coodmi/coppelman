@@ -1,14 +1,13 @@
 import { useState } from 'react'
 
-export default function PersonSearch({ people = [], onClose, onSearch }) {
-  // mode: 'toldBy' | 'toldAbout'
+export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], onClose, onSearch }) {
   const [mode, setMode]         = useState('toldBy')
   const [selected, setSelected] = useState([])
   const [keyword, setKeyword]   = useState('')
 
   function switchMode(newMode) {
     setMode(newMode)
-    setSelected([]) // clear selection when switching
+    setSelected([])
   }
 
   function toggle(name) {
@@ -27,8 +26,10 @@ export default function PersonSearch({ people = [], onClose, onSearch }) {
     setKeyword('')
   }
 
-  const left  = people.filter((_, i) => i % 2 === 0)
-  const right = people.filter((_, i) => i % 2 !== 0)
+  // Show list based on active mode
+  const people = mode === 'toldBy' ? toldByPeople : toldAboutPeople
+  const left   = people.filter((_, i) => i % 2 === 0)
+  const right  = people.filter((_, i) => i % 2 !== 0)
 
   return (
     <div className="person-page fade-in">
