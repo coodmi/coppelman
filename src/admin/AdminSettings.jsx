@@ -12,7 +12,7 @@ function PasswordField({ label, value, onChange }) {
           type={show ? 'text' : 'password'}
           value={value}
           onChange={onChange}
-          style={{ paddingRight: 40 }}
+          style={{ paddingRight: 40, boxSizing: 'border-box', width: '100%' }}
         />
         <button
           type="button"
