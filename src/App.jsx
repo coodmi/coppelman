@@ -56,22 +56,16 @@ export default function App() {
     if (!query.trim()) {
       list = [...allPosts]
     } else if (personMode && typeof personMode === 'object' && (personMode.by?.length || personMode.about?.length)) {
-      // Cross-search: filter posts matching selected told-by AND/OR told-about names
+      // Cross-search: OR logic — posts matching any told-by OR any told-about selection
       list = allPosts.filter((post) => {
-        const byMatch  = personMode.by?.length
+        const byMatch = personMode.by?.length
           ? personMode.by.some((name) => post.author?.toLowerCase().includes(name.toLowerCase()))
-          : true
+          : false
         const aboutMatch = personMode.about?.length
           ? personMode.about.some((name) => post.related?.toLowerCase().includes(name.toLowerCase()))
-          : true
-        // If both selected: must match both (cross-search)
-        if (personMode.by?.length && personMode.about?.length) return byMatch && aboutMatch
+          : false
         return byMatch || aboutMatch
       })
-      // Also apply keyword if present
-      if (query.trim() && !(personMode.by?.length || personMode.about?.length)) {
-        list = fuse.search(query).map((r) => r.item)
-      }
     } else {
       list = fuse.search(query).map((r) => r.item)
     }
