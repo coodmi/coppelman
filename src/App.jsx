@@ -56,19 +56,38 @@ export default function App() {
     if (!query.trim()) {
       list = [...allPosts]
     } else if (personMode && typeof personMode === 'object' && (personMode.by?.length || personMode.about?.length)) {
-      const hasBy    = personMode.by?.length > 0
-      const hasAbout = personMode.about?.length > 0
+      const byNames    = personMode.by    || []
+      const aboutNames = personMode.about || []
+      const allSelected = [...new Set([...byNames, ...aboutNames])]
 
-      list = allPosts.filter((post) => {
-        const byMatch = hasBy
-          ? personMode.by.some((name) => post.author?.toLowerCase().includes(name.toLowerCase()))
-          : true
-        const aboutMatch = hasAbout
-          ? personMode.about.some((name) => post.related?.toLowerCase().includes(name.toLowerCase()))
-          : true
-        // AND logic: post must satisfy both conditions when both are selected
-        return byMatch && aboutMatch
-      })
+      if (byNames.length > 0 && aboutNames.length > 0) {
+        // Cross-search: show posts where any selected person told about any other selected person
+        // i.e. (author in byNames AND related contains aboutNames)
+        //   OR (author in aboutNames AND related contains byNames)
+        list = allPosts.filter((post) => {
+          const authorLower  = (post.author  || '').toLowerCase()
+          const relatedLower = (post.related || '').toLowerCase()
+
+          const case1 = byNames.some((n) => authorLower.includes(n.toLowerCase())) &&
+                        aboutNames.some((n) => relatedLower.includes(n.toLowerCase()))
+
+          const case2 = aboutNames.some((n) => authorLower.includes(n.toLowerCase())) &&
+                        byNames.some((n) => relatedLower.includes(n.toLowerCase()))
+
+          return case1 || case2
+        })
+      } else {
+        // Only one side selected — simple filter
+        list = allPosts.filter((post) => {
+          const byMatch = byNames.length
+            ? byNames.some((n) => (post.author || '').toLowerCase().includes(n.toLowerCase()))
+            : true
+          const aboutMatch = aboutNames.length
+            ? aboutNames.some((n) => (post.related || '').toLowerCase().includes(n.toLowerCase()))
+            : true
+          return byMatch && aboutMatch
+        })
+      }
     } else {
       list = fuse.search(query).map((r) => r.item)
     }
