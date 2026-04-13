@@ -747,9 +747,15 @@ body {
 }
 
 .person-rows--two-col {
-  flex-direction: row;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0;
+  padding: 8px 46px;
+}
+
+.person-rows--two-col .person-item {
+  padding: 10px 0;
+  border-bottom: none;
 }
 
 .person-col {

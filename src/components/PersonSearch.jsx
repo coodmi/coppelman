@@ -69,55 +69,32 @@ export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], 
           {(showToldBy || showToldAbout) && (
             <div className={`person-rows${bothActive ? ' person-rows--two-col' : ''}`}>
               {bothActive ? (
-                // Both active: show merged unique list — no duplicates
+                // Both active: merged unique list in 2-column grid
                 (() => {
                   const merged = [...new Set([...toldByPeople, ...toldAboutPeople])]
-                  const left   = merged.filter((_, i) => i % 2 === 0)
-                  const right  = merged.filter((_, i) => i % 2 !== 0)
-                  return left.map((name, i) => (
-                    <div className="person-row" key={name}>
-                      <button
-                        className="person-item"
-                        onClick={() => {
-                          // toggle in both by and about
-                          const inBy    = selectedBy.includes(name)
-                          const inAbout = selectedAbout.includes(name)
-                          if (inBy || inAbout) {
-                            setSelectedBy(selectedBy.filter(n => n !== name))
-                            setSelectedAbout(selectedAbout.filter(n => n !== name))
-                          } else {
-                            if (toldByPeople.includes(name))    setSelectedBy(p => [...p, name])
-                            if (toldAboutPeople.includes(name)) setSelectedAbout(p => [...p, name])
-                          }
-                        }}
-                      >
-                        <span className={`person-check-box${(selectedBy.includes(name) || selectedAbout.includes(name)) ? ' person-check-box--checked' : ''}`}>
-                          {(selectedBy.includes(name) || selectedAbout.includes(name)) && <span className="check-mark" />}
-                        </span>
-                        <span className="person-name">{name}</span>
-                      </button>
-                      {right[i] && (
-                        <button
-                          className="person-item person-item--right"
-                          onClick={() => {
-                            const n = right[i]
-                            const inBy    = selectedBy.includes(n)
-                            const inAbout = selectedAbout.includes(n)
-                            if (inBy || inAbout) {
-                              setSelectedBy(selectedBy.filter(x => x !== n))
-                              setSelectedAbout(selectedAbout.filter(x => x !== n))
-                            } else {
-                              if (toldByPeople.includes(n))    setSelectedBy(p => [...p, n])
-                              if (toldAboutPeople.includes(n)) setSelectedAbout(p => [...p, n])
-                            }
-                          }}
-                        >
-                          <span className={`person-check-box${(selectedBy.includes(right[i]) || selectedAbout.includes(right[i])) ? ' person-check-box--checked' : ''}`}>
-                            {(selectedBy.includes(right[i]) || selectedAbout.includes(right[i])) && <span className="check-mark" />}
-                          </span>
-                          <span className="person-name">{right[i]}</span>
-                        </button>
-                      )}
+                  return merged.map((name) => (
+                    <button
+                      key={name}
+                      className="person-item"
+                      onClick={() => {
+                        const inBy    = selectedBy.includes(name)
+                        const inAbout = selectedAbout.includes(name)
+                        if (inBy || inAbout) {
+                          setSelectedBy(selectedBy.filter(n => n !== name))
+                          setSelectedAbout(selectedAbout.filter(n => n !== name))
+                        } else {
+                          if (toldByPeople.includes(name))    setSelectedBy(p => [...p, name])
+                          if (toldAboutPeople.includes(name)) setSelectedAbout(p => [...p, name])
+                        }
+                      }}
+                    >
+                      <span className={`person-check-box${(selectedBy.includes(name) || selectedAbout.includes(name)) ? ' person-check-box--checked' : ''}`}>
+                        {(selectedBy.includes(name) || selectedAbout.includes(name)) && <span className="check-mark" />}
+                      </span>
+                      <span className="person-name">{name}</span>
+                    </button>
+                  ))
+                })()
                     </div>
                   ))
                 })()
