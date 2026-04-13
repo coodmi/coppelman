@@ -101,18 +101,20 @@ body {
   padding: 0;
   outline: none;
   -webkit-appearance: none;
+  transition: font-size 0.15s ease, color 0.15s ease;
 }
 
-.header-title-input::placeholder {
-  color: #CAC9C6;
+.header-title-input::placeholder { color: #CAC9C6; }
+
+.header-title-input:not(:placeholder-shown) {
+  font-size: 20px;
+  color: #555;
+  line-height: 50px;
 }
 
-.header-title-input:focus {
+.header-title-input:focus:not(:placeholder-shown) {
+  font-size: 20px;
   color: #000;
-}
-
-.header-title-input:focus::placeholder {
-  color: #ddd;
 }
 
 .header-search-btn {
