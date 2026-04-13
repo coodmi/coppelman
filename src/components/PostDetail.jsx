@@ -18,7 +18,11 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
     timeoutRef.current = setTimeout(() => setAnimating(false), 500)
   }
 
-  function next() { if (canNext) go(offset + 1) }
+  // Always loops: at end, jump back to start
+  function next() {
+    if (images.length <= 3) return
+    go(canNext ? offset + 1 : 0)
+  }
   function prev() { if (canPrev) go(offset - 1) }
 
   const visible = images.slice(offset, offset + 3)
@@ -92,14 +96,12 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
             </button>
           )}
 
-          {/* Next button — always right, hidden when no more */}
-          {images.length > 0 && (
+          {/* Next button — always visible at right, loops back to start */}
+          {images.length > 3 && (
             <button
               className="detail-nav-btn detail-nav-btn--next"
               onClick={next}
               aria-label="Next"
-              disabled={!canNext}
-              style={{ opacity: canNext ? 1 : 0, pointerEvents: canNext ? 'auto' : 'none' }}
             >
               <span className="detail-nav-arrow detail-nav-arrow--tr" />
               <span className="detail-nav-arrow detail-nav-arrow--br" />
