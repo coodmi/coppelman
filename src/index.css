@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
 
 /* MinervaModern fallback to a similar serif */
 @font-face {
@@ -281,13 +281,14 @@ body {
 }
 
 .post-title {
-  font-family: 'MinervaModern', Georgia, serif;
+  font-family: 'EB Garamond', Garamond, serif;
   font-size: 42px;
   line-height: 50px;
   color: #000;
   font-weight: 300;
   cursor: pointer;
   transition: opacity 0.15s;
+  letter-spacing: -0.01em;
 }
 
 .post-title:hover { opacity: 0.6; }
