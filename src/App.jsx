@@ -286,6 +286,7 @@ export default function App() {
         posts={results}
         onBack={() => setQuery('')}
         onSelect={(p) => selectPost(p)}
+        onCategoryClick={(cat) => selectCategory(cat)}
         sortBy={sortBy}
         onSortChange={(v) => setSortBy(v)}
         searchSource={searchSource}

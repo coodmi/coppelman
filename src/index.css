@@ -252,6 +252,13 @@ body {
   line-height: 17px;
 }
 
+.meta-category--link {
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.meta-category--link:hover { opacity: 0.5; }
+
 .post-told {
   font-size: 15px;
   color: #000;

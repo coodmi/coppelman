@@ -10,7 +10,7 @@ const ARRANGE_OPTIONS = [
   { value: 'toldAbout', label: 'Told About A–Z' },
 ]
 
-export default function SearchResults({ query, posts, onSelect, sortBy, onSortChange, searchSource }) {
+export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource }) {
   const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
 
@@ -95,14 +95,15 @@ export default function SearchResults({ query, posts, onSelect, sortBy, onSortCh
           <article
             className="post-item"
             key={post.id}
-            onClick={() => onSelect?.(post)}
-            style={{ cursor: 'pointer' }}
           >
             <div className="post-meta">
               <span className="meta-author">{post.author}</span>
-              <span className="meta-category">{post.category}</span>
+              <span
+                className="meta-category meta-category--link"
+                onClick={(e) => { e.stopPropagation(); onCategoryClick?.(post.category) }}
+              >{post.category}</span>
             </div>
-            <h2 className="post-title">{post.title}</h2>
+            <h2 className="post-title" onClick={() => onSelect?.(post)}>{post.title}</h2>
             <div className="post-told-row">
               <span className="post-told">{post.toldAbout}</span>
               {post.related && <span className="post-related-inline">{post.related}</span>}
