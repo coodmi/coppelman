@@ -49,37 +49,39 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
         <div className="detail-divider" />
 
         {/* Image slider */}
-        <div className="detail-slider">
-          <div
-            className="detail-slider-track"
-            style={{
-              transform: `translateX(-${offset * (100 / 3)}%)`,
-              transition: animating ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
-              display: 'flex',
-              width: `${Math.max(images.length, 3) * (100 / 3)}%`,
-            }}
-          >
-            {images.length === 0 ? (
-              <>
-                <div className="detail-img detail-img--slot0" style={{ flex: '0 0 33.333%' }} />
-                <div className="detail-img detail-img--slot1" style={{ flex: '0 0 33.333%' }} />
-                <div className="detail-img detail-img--slot2" style={{ flex: '0 0 33.333%' }} />
-              </>
-            ) : (
-              images.map((src, i) => (
-                <div
-                  key={i}
-                  className={`detail-img detail-img--slot${Math.min(i - offset, 2)}`}
-                  style={{
-                    flex: `0 0 ${100 / Math.max(images.length, 3)}%`,
-                    backgroundImage: `url(${src})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    transition: 'opacity 0.4s ease',
-                  }}
-                />
-              ))
-            )}
+        <div className="detail-slider-wrap">
+          <div className="detail-slider">
+            <div
+              className="detail-slider-track"
+              style={{
+                transform: `translateX(-${offset * (100 / 3)}%)`,
+                transition: animating ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
+                display: 'flex',
+                width: `${Math.max(images.length, 3) * (100 / 3)}%`,
+              }}
+            >
+              {images.length === 0 ? (
+                <>
+                  <div className="detail-img detail-img--slot0" style={{ flex: '0 0 33.333%' }} />
+                  <div className="detail-img detail-img--slot1" style={{ flex: '0 0 33.333%' }} />
+                  <div className="detail-img detail-img--slot2" style={{ flex: '0 0 33.333%' }} />
+                </>
+              ) : (
+                images.map((src, i) => (
+                  <div
+                    key={i}
+                    className={`detail-img detail-img--slot${Math.min(i - offset, 2)}`}
+                    style={{
+                      flex: `0 0 ${100 / Math.max(images.length, 3)}%`,
+                      backgroundImage: `url(${src})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      transition: 'opacity 0.4s ease',
+                    }}
+                  />
+                ))
+              )}
+            </div>
           </div>
 
           {/* Prev button */}
@@ -90,10 +92,15 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
             </button>
           )}
 
-          {/* Next button */}
-          {(canNext || images.length === 0) && (
-            <button className="detail-nav-btn detail-nav-btn--next" onClick={next} aria-label="Next"
-              disabled={!canNext}>
+          {/* Next button — always right, hidden when no more */}
+          {images.length > 0 && (
+            <button
+              className="detail-nav-btn detail-nav-btn--next"
+              onClick={next}
+              aria-label="Next"
+              disabled={!canNext}
+              style={{ opacity: canNext ? 1 : 0, pointerEvents: canNext ? 'auto' : 'none' }}
+            >
               <span className="detail-nav-arrow detail-nav-arrow--tr" />
               <span className="detail-nav-arrow detail-nav-arrow--br" />
             </button>

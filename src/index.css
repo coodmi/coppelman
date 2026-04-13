@@ -1078,9 +1078,13 @@ body {
 }
 
 /* Image slider */
-.detail-slider {
+.detail-slider-wrap {
   position: relative;
   margin: 24px 0;
+}
+
+.detail-slider {
+  position: relative;
   overflow: hidden;
 }
 
@@ -1249,7 +1253,7 @@ body {
   .detail-body { padding: 0 0 40px; }
   .detail-title { font-size: 28px; line-height: 36px; padding: 16px 0 14px; }
   .detail-divider { width: 100%; }
-  .detail-slider { margin: 16px 0; }
+  .detail-slider-wrap { margin: 16px 0; }
   .detail-slider-track { height: 180px; }
   .detail-img { height: 180px; }
   .detail-img--slot0 { width: 55%; }
