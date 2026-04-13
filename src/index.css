@@ -532,32 +532,11 @@ body {
   font-weight: 400;
 }
 
-/* Plus/cross arrow icon */
-.cat-arrow {
-  position: relative;
-  width: 29px;
-  height: 29px;
+.cat-chevron {
+  font-size: 24px;
+  color: #888;
   flex-shrink: 0;
-}
-
-.cat-arrow-v,
-.cat-arrow-h {
-  position: absolute;
-  background: #000;
-}
-
-.cat-arrow-v {
-  width: 1px;
-  height: 29px;
-  left: 50%;
-  top: 0;
-}
-
-.cat-arrow-h {
-  width: 29px;
-  height: 1px;
-  top: 50%;
-  left: 0;
+  margin-left: 12px;
 }
 
 /* Subcategories */
@@ -566,6 +545,13 @@ body {
   flex-direction: column;
   gap: 0;
   padding: 8px 46px 24px;
+}
+
+.cat-subs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 4px;
 }
 
 .cat-sub-item {

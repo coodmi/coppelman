@@ -1,18 +1,15 @@
 import { useState } from 'react'
 
-export default function CategoryMenu({ categories = [], posts = [], onClose, onSelect }) {
+export default function CategoryMenu({ categories = [], onClose, onSelect }) {
   const [expanded, setExpanded] = useState(null)
 
-  // Build dynamic subcategories from real post titles per category
-  const CATS = categories.map((name) => {
-    const catPosts = posts.filter(
-      (p) => p.category && p.category.toLowerCase() === name.toLowerCase()
-    )
-    return { name, posts: catPosts }
-  })
+  // Normalize: support both old flat strings and new {name, subs} objects
+  const cats = categories.map(c =>
+    typeof c === 'string' ? { name: c, subs: [] } : c
+  )
 
   function toggle(name) {
-    setExpanded((prev) => (prev === name ? null : name))
+    setExpanded(prev => prev === name ? null : name)
   }
 
   return (
@@ -31,47 +28,45 @@ export default function CategoryMenu({ categories = [], posts = [], onClose, onS
         <div className="cat-sidebar" />
 
         <div className="cat-list">
-          <div className="cat-heading">View by Category</div>
+          <button className="person-back" onClick={onClose}>‹</button>
+          <div className="cat-heading">View By Category</div>
 
-          {CATS.map((cat) => (
-            <div key={cat.name}>
-              <div className="cat-divider" />
-              <button
-                className="cat-item"
-                onClick={() => cat.posts.length ? toggle(cat.name) : onSelect(cat.name)}
-              >
-                <span className="cat-item-label">{cat.name}</span>
-                {cat.posts.length > 0 && (
-                  <span className="cat-arrow">
-                    <span className="cat-arrow-v" style={{ transform: expanded === cat.name ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s ease' }} />
-                    <span className="cat-arrow-h" style={{ opacity: expanded === cat.name ? 0 : 1, transition: 'opacity 0.2s ease' }} />
-                  </span>
-                )}
-              </button>
+          {cats.map((cat) => {
+            const isOpen = expanded === cat.name
+            const hasSubs = cat.subs && cat.subs.length > 0
 
-              {/* Expanded: show post titles */}
-              {expanded === cat.name && cat.posts.length > 0 && (
-                <div className="cat-subs fade-in">
-                  {/* View All option */}
-                  <button
-                    className="cat-sub-item cat-sub-item--all"
-                    onClick={() => onSelect(cat.name)}
-                  >
-                    VIEW ALL
-                  </button>
-                  {cat.posts.map((post) => (
-                    <button
-                      key={post.id}
-                      className="cat-sub-item"
-                      onClick={() => onSelect(post.title)}
-                    >
-                      {post.title}
+            return (
+              <div key={cat.name}>
+                <div className="cat-divider" />
+                <button
+                  className="cat-item"
+                  onClick={() => toggle(cat.name)}
+                >
+                  <span className="cat-item-label">{cat.name}</span>
+                  <span className="cat-chevron">{isOpen ? '∨' : '›'}</span>
+                </button>
+
+                {isOpen && (
+                  <div className="cat-subs fade-in">
+                    {/* View All always first */}
+                    <button className="cat-sub-item cat-sub-item--all" onClick={() => onSelect(cat.name)}>
+                      View All
                     </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+
+                    {hasSubs && (
+                      <div className="cat-subs-grid">
+                        {cat.subs.map(sub => (
+                          <button key={sub} className="cat-sub-item" onClick={() => onSelect(sub)}>
+                            {sub}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          })}
           <div className="cat-divider" />
         </div>
       </div>

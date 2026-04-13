@@ -6,9 +6,16 @@ const LS_KEY = 'qs_db'
 
 const DEFAULTS = {
   posts:      initialPosts,
-  categories: ['Golf','Polo & Equestrian','Wine','Farm & Village','Museum by Ando','The Land'],
-  people:     ['Adrian Zecha','Nacho Figueras','Jonathan Breene','Ignacio Ramos Sr.','Howard Backen','Ignacio Ramos Jr.','Tom Doak','Jean-Michel Gathy','Tadao Ando','Kerry Hill'],
-  password:   'admin123',
+  categories: [
+    { name: 'Golf',              subs: [] },
+    { name: 'Polo & Equestrian', subs: [] },
+    { name: 'Wine',              subs: [] },
+    { name: 'Farm & Village',    subs: [] },
+    { name: 'Museum by Ando',    subs: [] },
+    { name: 'The Land',          subs: [] },
+  ],
+  people:   ['Adrian Zecha','Nacho Figueras','Jonathan Breene','Ignacio Ramos Sr.','Howard Backen','Ignacio Ramos Jr.','Tom Doak','Jean-Michel Gathy','Tadao Ando','Kerry Hill'],
+  password: 'admin123',
 }
 
 // ── In-memory cache ──────────────────────────────────────────────
@@ -53,19 +60,26 @@ async function apiSet(key, data) {
 export async function fetchAll() {
   try {
     const db = await apiGet()
-    // Seed initial posts if server db is empty
     if (!db.posts || db.posts.length === 0) {
       const lsDb = lsLoad()
       db.posts = lsDb?.posts?.length ? lsDb.posts : initialPosts
       await apiSet('posts', db.posts)
     }
+    // Normalize flat categories to structured format
+    if (Array.isArray(db.categories) && db.categories.length > 0 && typeof db.categories[0] === 'string') {
+      db.categories = db.categories.map(name => ({ name, subs: [] }))
+      await apiSet('categories', db.categories)
+    }
     _cache = { ...DEFAULTS, ...db }
-    lsSave(_cache) // keep localStorage in sync as backup
+    lsSave(_cache)
     return _cache
   } catch {
-    // API unavailable — use localStorage
     const lsDb = lsLoad()
     _cache = lsDb ? { ...DEFAULTS, ...lsDb } : { ...DEFAULTS }
+    // Normalize if needed
+    if (Array.isArray(_cache.categories) && _cache.categories.length > 0 && typeof _cache.categories[0] === 'string') {
+      _cache.categories = _cache.categories.map(name => ({ name, subs: [] }))
+    }
     return _cache
   }
 }
