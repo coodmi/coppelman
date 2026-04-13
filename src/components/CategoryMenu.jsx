@@ -25,10 +25,11 @@ export default function CategoryMenu({ categories = [], onClose, onSelect }) {
       </div>
 
       <div className="cat-body">
-        <div className="cat-sidebar" />
+        <div className="cat-sidebar">
+          <button className="cat-back-btn" onClick={onClose} aria-label="Back">‹</button>
+        </div>
 
         <div className="cat-list">
-          <button className="person-back" onClick={onClose}>‹</button>
           <div className="cat-heading">View By Category</div>
 
           {cats.map((cat) => {

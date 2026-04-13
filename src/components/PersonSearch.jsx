@@ -42,10 +42,11 @@ export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], 
       </div>
 
       <div className="person-body">
-        <div className="cat-sidebar" />
+        <div className="cat-sidebar">
+          <button className="cat-back-btn" onClick={onClose} aria-label="Back">‹</button>
+        </div>
 
         <div className="person-content">
-          <button className="person-back" onClick={onClose} aria-label="Back">‹</button>
           <div className="person-heading">Search by Person</div>
           <div className="person-divider" />
 

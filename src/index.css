@@ -522,19 +522,35 @@ body {
 }
 
 .cat-sidebar {
-  width: 29px;
+  width: 89px;
   min-height: 100%;
-  position: absolute;
-  left: 60px;
+  position: relative;
+  left: 0;
   top: 0;
-  bottom: 0;
   background: linear-gradient(90deg, #EDEEEA 44.23%, rgba(217,217,217,0.8) 100%);
-  pointer-events: none;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 16px;
 }
+
+.cat-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #888;
+  line-height: 1;
+  padding: 4px 8px;
+  transition: color 0.15s;
+}
+
+.cat-back-btn:hover { color: #000; }
 
 .cat-list {
   flex: 1;
-  padding: 0 0 40px 89px;
+  padding: 0 0 40px 46px;
 }
 
 .cat-heading {
@@ -648,7 +664,7 @@ body {
 
 .person-content {
   flex: 1;
-  padding: 0 0 40px 89px;
+  padding: 0 0 40px 46px;
 }
 
 .person-back {
