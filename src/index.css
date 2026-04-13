@@ -224,7 +224,7 @@ body {
 
 .post-item {
   border-top: 1px solid #B8B8B4;
-  padding: 20px 67px 40px;
+  padding: 20px 46px 40px;
   position: relative;
 }
 
@@ -923,11 +923,11 @@ body {
 .results-filter-bar {
   display: flex;
   justify-content: flex-end;
-  padding: 16px 24px;
+  padding: 16px 46px;
 }
 
 .results-heading-wrap {
-  padding: 24px 67px 0;
+  padding: 24px 46px 0;
 }
 
 .results-heading {
