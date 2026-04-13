@@ -68,47 +68,40 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
             <div
               className="detail-slider-track"
               style={{
-                transform: `translateX(-${page * 100}%)`,
+                transform: `translateX(-${page * (100 / loopedPages.length)}%)`,
                 transition: transition ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
                 display: 'flex',
-                width: `${Math.max(loopedPages.length, 1) * 100}%`,
+                width: `${loopedPages.length * 100}%`,
+                height: '100%',
               }}
             >
               {loopedPages.length === 0 ? (
-                <div style={{ flex: '0 0 100%', display: 'flex' }}>
-                  <div className="detail-img detail-img--slot0" style={{ flex: '0 0 33.333%' }} />
-                  <div className="detail-img detail-img--slot1" style={{ flex: '0 0 33.333%' }} />
-                  <div className="detail-img detail-img--slot2" style={{ flex: '0 0 33.333%' }} />
-                </div>
+                <>
+                  <div style={{ width: '33.333%', height: '100%', background: '#ccc' }} />
+                  <div style={{ width: '33.333%', height: '100%', background: '#ccc' }} />
+                  <div style={{ width: '33.333%', height: '100%', background: '#ccc' }} />
+                </>
               ) : (
                 loopedPages.map((pg, pi) => (
-                  <div key={pi} style={{ flex: `0 0 ${100 / loopedPages.length}%`, display: 'flex', height: '100%' }}>
-                    {pg.map((src, si) => (
-                      <div
-                        key={si}
-                        className="detail-img"
-                        style={{
-                          flex: '0 0 33.333%',
-                          height: '100%',
-                          backgroundImage: `url(${src})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                        }}
-                      />
-                    ))}
-                    {/* Fill empty slots if last page has < 3 images */}
-                    {pg.length < 3 && Array.from({ length: 3 - pg.length }).map((_, ei) => (
-                      <div key={`e${ei}`} className="detail-img" style={{ flex: '0 0 33.333%', height: '100%', background: '#e8e8e4' }} />
-                    ))}
-                  </div>
+                  pg.map((src, si) => (
+                    <img
+                      key={`${pi}-${si}`}
+                      src={src}
+                      alt=""
+                      style={{
+                        width: `${100 / (loopedPages.length * 3)}%`,
+                        height: '100%',
+                        objectFit: 'cover',
+                        flexShrink: 0,
+                        display: 'block',
+                      }}
+                    />
+                  ))
                 ))
               )}
             </div>
           </div>
 
-          {/* Prev button — removed, loop is automatic */}
-
-          {/* Next button — always fixed at right, manual click resets auto-timer */}
           {pages.length > 1 && (
             <button
               className="detail-nav-btn detail-nav-btn--next"
