@@ -78,6 +78,7 @@ export default function App() {
   // Sync URL when post selected
   function selectPost(post) {
     setSelectedPost(post)
+    window.scrollTo(0, 0)
     if (post) {
       const slug = slugify(post.title)
       window.history.pushState({ postId: post.id }, '', `/post/${post.id}-${slug}`)
