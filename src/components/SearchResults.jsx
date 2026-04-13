@@ -13,10 +13,22 @@ export default function SearchResults({ query, posts, onSelect }) {
     return true
   })
 
+  const hasQuery = !!query.trim()
+
   return (
     <div className="results-page">
 
-      {/* Filter sub-bar — sits right below header */}
+      {/* Show heading + query only when searching */}
+      {hasQuery && (
+        <div className="results-heading-wrap">
+          <div>
+            <div className="results-heading">Search Result</div>
+            <div className="results-query-label">Search Query: {query}</div>
+          </div>
+        </div>
+      )}
+
+      {/* Filter bar — always visible on right */}
       <div className="results-filter-bar">
         <div className="results-filter">
           <button className="results-filter-box" onClick={() => setFilterOpen(v => !v)}>

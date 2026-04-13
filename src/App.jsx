@@ -278,17 +278,13 @@ export default function App() {
         isSearching={!!query.trim()}
       />
 
-      {/* Results — inline below header */}
-      {query.trim() ? (
-        <SearchResults
-          query={query}
-          posts={results}
-          onBack={() => setQuery('')}
-          onSelect={(p) => selectPost(p)}
-        />
-      ) : (
-        <PostList posts={results} onSelect={(p) => selectPost(p)} />
-      )}
+      {/* Always use SearchResults layout — shows all posts on home, filtered on search */}
+      <SearchResults
+        query={query}
+        posts={results}
+        onBack={() => setQuery('')}
+        onSelect={(p) => selectPost(p)}
+      />
     </div>
   )
 }
