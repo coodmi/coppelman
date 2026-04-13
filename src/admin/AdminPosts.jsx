@@ -144,7 +144,18 @@ export default function AdminPosts() {
               <option value="">— select —</option>
               {categories.map((c) => {
                 const name = typeof c === 'string' ? c : c.name
-                return <option key={name} value={name.toUpperCase()}>{name}</option>
+                const subs = typeof c === 'string' ? [] : (c.subs || [])
+                if (subs.length === 0) {
+                  return <option key={name} value={name.toUpperCase()}>{name}</option>
+                }
+                return (
+                  <optgroup key={name} label={name}>
+                    <option value={name.toUpperCase()}>{name} — All</option>
+                    {subs.map(sub => (
+                      <option key={sub} value={sub.toUpperCase()}>{sub}</option>
+                    ))}
+                  </optgroup>
+                )
               })}
             </select>
           </div>
