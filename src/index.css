@@ -448,7 +448,7 @@ body {
 .menu-nav-item:hover { opacity: 0.6; }
 
 .menu-nav-label {
-  font-family: 'EB Garamond', Garamond, serif;
+  font-family: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
   font-size: 42px;
   line-height: 50px;
   color: #000;
