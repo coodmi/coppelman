@@ -8,4 +8,9 @@ deployment:
     - cp -r dist/. $DEPLOYPATH
     - cp .htaccess $DEPLOYPATH/.htaccess
     - mkdir -p $DEPLOYPATH/api
+    - mkdir -p $DEPLOYPATH/api/uploads
     - cp api/data.php $DEPLOYPATH/api/data.php
+    - cp api/upload.php $DEPLOYPATH/api/upload.php
+    - chmod 755 $DEPLOYPATH/api/uploads
+    - touch $DEPLOYPATH/api/db.json
+    - chmod 644 $DEPLOYPATH/api/db.json

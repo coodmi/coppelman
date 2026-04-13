@@ -142,7 +142,10 @@ export default function AdminPosts() {
             <label className="adm-label">Category</label>
             <select className="adm-select" value={form.category} onChange={(e) => set('category', e.target.value)}>
               <option value="">— select —</option>
-              {categories.map((c) => <option key={c} value={c.toUpperCase()}>{c}</option>)}
+              {categories.map((c) => {
+                const name = typeof c === 'string' ? c : c.name
+                return <option key={name} value={name.toUpperCase()}>{name}</option>
+              })}
             </select>
           </div>
 
