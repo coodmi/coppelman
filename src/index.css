@@ -261,23 +261,28 @@ body {
 .meta-category--link:hover { opacity: 0.5; }
 
 .post-told {
-  font-size: 15px;
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 14px;
+  font-style: italic;
   color: #000;
   line-height: 17px;
+  flex-shrink: 0;
 }
 
 .post-told-row {
   display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: 20px;
   margin-top: 12px;
 }
 
 .post-related-inline {
-  font-size: 15px;
-  letter-spacing: 0.08em;
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
   color: #000;
   line-height: 17px;
+  text-transform: uppercase;
 }
 
 .post-related {
