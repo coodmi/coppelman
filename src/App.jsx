@@ -287,7 +287,6 @@ export default function App() {
           posts={results}
           onBack={() => setQuery('')}
           onSelect={(p) => selectPost(p)}
-          inline
         />
       ) : (
         <PostList posts={results} onSelect={(p) => selectPost(p)} />

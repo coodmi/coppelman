@@ -853,30 +853,48 @@ body {
   min-height: 100vh;
 }
 
-.results-inline {
-  /* no extra wrapper needed, just flows below header */
+/* Top bar: heading + filter */
+.results-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 32px 67px 20px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.results-heading-row {
-  padding: 8px 24px 4px;
+.results-top-left {}
+
+.results-heading {
+  font-family: 'MinervaModern', Georgia, serif;
+  font-size: 42px;
+  line-height: 50px;
+  color: #8C8888;
+  font-weight: 400;
 }
 
-.results-query {
+.results-query-label {
   font-family: 'EB Garamond', Garamond, serif;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  color: #888;
+  font-size: 15px;
+  line-height: 18px;
+  color: #8C8888;
+  margin-top: 6px;
+}
+
+.results-divider {
+  width: 100%;
+  height: 1px;
+  background: #B8B8B4;
 }
 
 .results-filter {
   position: relative;
-  margin-left: auto;
-  margin-right: 24px;
+  flex-shrink: 0;
 }
 
 .results-filter-box {
   box-sizing: border-box;
-  width: 253px;
+  width: 200px;
   height: 46px;
   border: 1px solid #B8B8B4;
   background: #EDEEEA;
@@ -890,25 +908,24 @@ body {
 
 .results-filter-label {
   font-family: 'EB Garamond', Garamond, serif;
-  font-size: 15px;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.1em;
   color: #000;
 }
 
 .results-filter-arrow {
   width: 0;
   height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 10px solid #000;
-  transform: rotate(180deg);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #000;
 }
 
 .results-filter-dropdown {
   position: absolute;
   top: 46px;
   left: 0;
-  width: 253px;
+  width: 200px;
   z-index: 10;
   border: 1px solid #B8B8B4;
   border-top: none;
@@ -918,12 +935,12 @@ body {
 .results-filter-option {
   display: block;
   width: 100%;
-  height: 46px;
+  height: 40px;
   background: #EDEEEA;
   border: none;
   border-bottom: 1px solid #B8B8B4;
   font-family: 'EB Garamond', Garamond, serif;
-  font-size: 15px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   color: #000;
   text-align: left;
@@ -934,26 +951,6 @@ body {
 .results-filter-option:last-child { border-bottom: none; }
 .results-filter-option:hover { background: #e0e0dc; }
 .results-filter-option--active { font-weight: 600; }
-
-.results-heading-row {
-  padding: 24px 74px 8px;
-}
-
-.results-heading {
-  font-family: 'MinervaModern', Georgia, serif;
-  font-size: 42px;
-  line-height: 50px;
-  color: #8C8888;
-  font-weight: 400;
-}
-
-.results-query {
-  font-family: 'EB Garamond', Garamond, serif;
-  font-size: 15px;
-  line-height: 18px;
-  color: #8C8888;
-  margin-top: 8px;
-}
 
 /* ── Post Detail ── */
 .detail-page {
