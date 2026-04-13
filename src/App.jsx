@@ -284,6 +284,8 @@ export default function App() {
         posts={results}
         onBack={() => setQuery('')}
         onSelect={(p) => selectPost(p)}
+        sortBy={sortBy}
+        onSortChange={(v) => setSortBy(v)}
       />
     </div>
   )
