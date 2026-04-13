@@ -1092,7 +1092,7 @@ body {
 
 .detail-slider-track {
   display: flex;
-  height: 257px;
+  height: 100%;
   will-change: transform;
 }
 

@@ -82,13 +82,14 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
                 </div>
               ) : (
                 loopedPages.map((pg, pi) => (
-                  <div key={pi} style={{ flex: `0 0 ${100 / loopedPages.length}%`, display: 'flex' }}>
+                  <div key={pi} style={{ flex: `0 0 ${100 / loopedPages.length}%`, display: 'flex', height: '100%' }}>
                     {pg.map((src, si) => (
                       <div
                         key={si}
                         className="detail-img"
                         style={{
                           flex: '0 0 33.333%',
+                          height: '100%',
                           backgroundImage: `url(${src})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
@@ -97,7 +98,7 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
                     ))}
                     {/* Fill empty slots if last page has < 3 images */}
                     {pg.length < 3 && Array.from({ length: 3 - pg.length }).map((_, ei) => (
-                      <div key={`e${ei}`} className="detail-img" style={{ flex: '0 0 33.333%', background: '#e8e8e4' }} />
+                      <div key={`e${ei}`} className="detail-img" style={{ flex: '0 0 33.333%', height: '100%', background: '#e8e8e4' }} />
                     ))}
                   </div>
                 ))
