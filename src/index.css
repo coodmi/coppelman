@@ -1034,7 +1034,7 @@ body {
 }
 
 .detail-body {
-  padding: 0 74px 60px;
+  padding: 0 0 60px;
 }
 
 .detail-title {
@@ -1047,7 +1047,7 @@ body {
 }
 
 .detail-divider {
-  width: 688px;
+  width: 100%;
   height: 1px;
   background: #B8B8B4;
   margin: 0 0 0 0;
@@ -1246,7 +1246,7 @@ body {
   .person-reset-wrap { padding-right: 20px; }
 
   /* Post detail */
-  .detail-body { padding: 0 20px 40px; }
+  .detail-body { padding: 0 0 40px; }
   .detail-title { font-size: 28px; line-height: 36px; padding: 16px 0 14px; }
   .detail-divider { width: 100%; }
   .detail-slider { margin: 16px 0; }
