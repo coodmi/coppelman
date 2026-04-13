@@ -70,8 +70,10 @@ export default function SearchResults({ query, posts, onSelect }) {
               <span className="meta-category">{post.category}</span>
             </div>
             <h2 className="post-title">{post.title}</h2>
-            <div className="post-told">{post.toldAbout}</div>
-            <div className="post-related">{post.related}</div>
+            <div className="post-told-row">
+              <span className="post-told">{post.toldAbout}</span>
+              {post.related && <span className="post-related-inline">{post.related}</span>}
+            </div>
           </article>
         ))}
       </div>

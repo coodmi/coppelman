@@ -255,7 +255,20 @@ body {
 .post-told {
   font-size: 15px;
   color: #000;
-  margin-bottom: 6px;
+  line-height: 17px;
+}
+
+.post-told-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.post-related-inline {
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: #000;
   line-height: 17px;
 }
 
