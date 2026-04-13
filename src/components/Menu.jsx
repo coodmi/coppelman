@@ -18,39 +18,34 @@ export default function Menu({ onClose, onSearch, onViewByCategory, onSearchByPe
             <span className="close-line close-line--2" />
           </button>
         </div>
+        <div className="header-title" style={{ color: '#CAC9C6' }}>Quick Search</div>
       </div>
 
       {/* Nav links */}
       <nav className="menu-nav">
         <button className="menu-nav-item" onClick={onSearchByPerson}>
           <span className="menu-nav-label">Search by Person</span>
-          <span className="menu-nav-arrow">
-            <span className="arrow-line arrow-line--top" />
-            <span className="arrow-line arrow-line--bottom" />
-          </span>
+          <span className="menu-nav-chevron">›</span>
         </button>
 
         <button className="menu-nav-item" onClick={onViewByCategory}>
           <span className="menu-nav-label">View by Category</span>
-          <span className="menu-nav-arrow">
-            <span className="arrow-line arrow-line--top" />
-            <span className="arrow-line arrow-line--bottom" />
-          </span>
+          <span className="menu-nav-chevron">›</span>
         </button>
       </nav>
 
       {/* Keyword search */}
       <form className="menu-search-form" onSubmit={handleGo}>
-        <div className="login-row">
+        <div className="menu-search-row">
           <input
-            className="login-input"
+            className="menu-search-input"
             type="search"
             placeholder="Keyword Search"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             aria-label="Keyword search"
           />
-          <button className="login-go" type="submit">GO</button>
+          <button className="menu-search-go" type="submit">GO</button>
         </div>
       </form>
     </div>

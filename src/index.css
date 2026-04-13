@@ -421,7 +421,7 @@ body {
 /* Nav items */
 .menu-nav {
   padding: 0 101px;
-  margin-top: 59px;
+  margin-top: 48px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -435,9 +435,12 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   text-align: left;
+  transition: opacity 0.15s;
 }
+
+.menu-nav-item:hover { opacity: 0.6; }
 
 .menu-nav-label {
   font-family: 'EB Garamond', Garamond, serif;
@@ -447,38 +450,55 @@ body {
   font-weight: 400;
 }
 
-.menu-nav-arrow {
-  position: relative;
-  width: 21px;
-  height: 21px;
+.menu-nav-chevron {
+  font-size: 28px;
+  color: #888;
   flex-shrink: 0;
-}
-
-.arrow-line {
-  position: absolute;
-  right: 0;
-  width: 21.21px;
-  height: 1px;
-  background: #000;
-}
-
-.arrow-line--top {
-  top: 6px;
-  transform: rotate(-135deg);
-  transform-origin: right center;
-}
-
-.arrow-line--bottom {
-  bottom: 6px;
-  transform: rotate(-45deg);
-  transform-origin: right center;
+  margin-left: 12px;
+  font-family: serif;
 }
 
 /* Keyword search inside menu */
 .menu-search-form {
   padding: 0 101px;
-  margin-top: 52px;
+  margin-top: 48px;
 }
+
+.menu-search-row {
+  display: flex;
+  height: 80px;
+  border: 1px solid #B8B8B4;
+}
+
+.menu-search-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 28px;
+  color: #8C8888;
+  padding: 0 24px;
+  outline: none;
+}
+
+.menu-search-input::placeholder { color: #B8B8B4; }
+
+.menu-search-go {
+  width: 93px;
+  height: 100%;
+  border: none;
+  border-left: 1px solid #B8B8B4;
+  background: transparent;
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  color: #000;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.menu-search-go:hover { background: #000; color: #fff; }
 
 /* ── Category Menu ── */
 .cat-page {
