@@ -853,32 +853,11 @@ body {
   min-height: 100vh;
 }
 
-/* Top bar: heading + filter */
-.results-top {
+/* Filter bar — sits below header, filter on right */
+.results-filter-bar {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 32px 67px 20px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.results-top-left {}
-
-.results-heading {
-  font-family: 'MinervaModern', Georgia, serif;
-  font-size: 42px;
-  line-height: 50px;
-  color: #8C8888;
-  font-weight: 400;
-}
-
-.results-query-label {
-  font-family: 'EB Garamond', Garamond, serif;
-  font-size: 15px;
-  line-height: 18px;
-  color: #8C8888;
-  margin-top: 6px;
+  justify-content: flex-end;
+  padding: 16px 24px;
 }
 
 .results-divider {

@@ -2,31 +2,24 @@ import { useState } from 'react'
 
 const FILTER_OPTIONS = ['ALL', 'KEYWORD', 'TOLD BY', 'TOLD ABOUT']
 
-export default function SearchResults({ query, posts, onSelect, inline }) {
-  const [filter, setFilter]   = useState('ALL')
+export default function SearchResults({ query, posts, onSelect }) {
+  const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
 
-  // Apply filter
   const filtered = posts.filter((post) => {
     if (filter === 'ALL')        return true
     if (filter === 'TOLD BY')    return (post.author  || '').toLowerCase().includes(query.toLowerCase())
     if (filter === 'TOLD ABOUT') return (post.related || '').toLowerCase().includes(query.toLowerCase())
-    return true // KEYWORD — already filtered by fuse
+    return true
   })
 
   return (
     <div className="results-page">
-      {/* Heading row */}
-      <div className="results-top">
-        <div className="results-top-left">
-          <div className="results-heading">Search Result</div>
-          <div className="results-query-label">Search Query: {query}</div>
-        </div>
+
+      {/* Filter sub-bar — sits right below header */}
+      <div className="results-filter-bar">
         <div className="results-filter">
-          <button
-            className="results-filter-box"
-            onClick={() => setFilterOpen(v => !v)}
-          >
+          <button className="results-filter-box" onClick={() => setFilterOpen(v => !v)}>
             <span className="results-filter-label">INCLUDE: {filter}</span>
             <span className="results-filter-arrow" />
           </button>
