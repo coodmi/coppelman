@@ -290,6 +290,7 @@ export default function App() {
         sortBy={sortBy}
         onSortChange={(v) => setSortBy(v)}
         searchSource={searchSource}
+        personMode={personMode}
       />
     </div>
   )

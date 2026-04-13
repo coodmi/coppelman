@@ -10,13 +10,29 @@ const ARRANGE_OPTIONS = [
   { value: 'toldAbout', label: 'Told About A–Z' },
 ]
 
-export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource }) {
+export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource, personMode }) {
   const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
 
   const hasQuery   = !!query.trim()
-  // Category results → ARRANGE BY; keyword/person/home → ARRANGE BY on home, INCLUDE on search
   const useArrange = !hasQuery || searchSource === 'category'
+
+  // Derive include label from personMode
+  function getIncludeLabel() {
+    const hasByMode    = personMode?.by?.length > 0
+    const hasAboutMode = personMode?.about?.length > 0
+    const hasKeyword   = query.trim() && searchSource !== 'category' && searchSource !== 'person'
+
+    if (searchSource === 'person') {
+      if (hasByMode && hasAboutMode) return 'INCLUDE: ALL'
+      if (hasByMode)                 return 'INCLUDE: TOLD BY'
+      if (hasAboutMode)              return 'INCLUDE: TOLD ABOUT'
+      if (query.trim())              return 'INCLUDE: KEYWORD'
+      return 'INCLUDE: ALL'
+    }
+    if (hasKeyword) return `INCLUDE: ${filter}`
+    return `INCLUDE: ${filter}`
+  }
 
   // Apply include filter only for keyword/person searches
   const filtered = (!hasQuery || useArrange) ? posts : posts.filter((post) => {
@@ -53,7 +69,7 @@ export default function SearchResults({ query, posts, onSelect, onCategoryClick,
                 ? (sortBy && sortBy !== 'default'
                     ? ARRANGE_OPTIONS.find(o => o.value === sortBy)?.label || 'ARRANGE BY'
                     : 'ARRANGE BY')
-                : `INCLUDE: ${filter}`}
+                : getIncludeLabel()}
             </span>
             <span className="results-filter-arrow" />
           </button>
