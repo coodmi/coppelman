@@ -51,8 +51,9 @@ export default function AdminCategories() {
       <div className="adm-section-title">Categories</div>
       {saved && <div className="adm-alert adm-alert--success">Saved.</div>}
 
-      {cats.map((cat) => (
-        <div key={cat.name} className="adm-form" style={{ marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+        {cats.map((cat) => (
+          <div key={cat.name} style={{ background: '#fff', padding: '20px', border: '1px solid #e8e8e4' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <strong style={{ fontSize: 18 }}>{cat.name}</strong>
             <button className="adm-btn adm-btn--danger" onClick={() => removeCat(cat.name)}>Remove</button>
@@ -83,7 +84,8 @@ export default function AdminCategories() {
             <button className="adm-btn adm-btn--primary" onClick={() => addSub(cat.name)}>Add</button>
           </div>
         </div>
-      ))}
+        ))}
+      </div>
 
       {/* Add new parent category */}
       <div className="adm-form">
