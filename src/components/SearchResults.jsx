@@ -37,7 +37,9 @@ export default function SearchResults({ query, posts, onSelect, sortBy, onSortCh
         <div className="results-heading-wrap">
           <div>
             <div className="results-heading">Search Result</div>
-            <div className="results-query-label">Search Query: {query}</div>
+            <div className="results-query-label">
+              {searchSource === 'category' ? 'Category: ' : 'Search Query: '}{query}
+            </div>
           </div>
         </div>
       )}
