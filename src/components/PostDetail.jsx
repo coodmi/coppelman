@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Header from './Header'
 
 export default function PostDetail({ post, similarPosts, onBack, onSelect, onSearch, sortBy, onSortChange, sortOptions }) {
@@ -6,9 +6,7 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
   const [offset, setOffset] = useState(0)
   const [animating, setAnimating] = useState(false)
   const timeoutRef = useRef(null)
-
-  const canNext = offset + 3 < images.length
-  const canPrev = offset > 0
+  const autoRef = useRef(null)
 
   function go(newOffset) {
     if (animating) return
@@ -18,12 +16,20 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
     timeoutRef.current = setTimeout(() => setAnimating(false), 500)
   }
 
-  // Always loops: at end, jump back to start
   function next() {
     if (images.length <= 3) return
-    go(canNext ? offset + 1 : 0)
+    setOffset(prev => {
+      const nextOffset = prev + 1 >= images.length - 2 ? 0 : prev + 1
+      return nextOffset
+    })
   }
-  function prev() { if (canPrev) go(offset - 1) }
+
+  // Auto-loop every 3 seconds
+  useEffect(() => {
+    if (images.length <= 3) return
+    autoRef.current = setInterval(next, 3000)
+    return () => clearInterval(autoRef.current)
+  }, [images.length])
 
   const visible = images.slice(offset, offset + 3)
 
@@ -59,7 +65,7 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
               className="detail-slider-track"
               style={{
                 transform: `translateX(-${offset * (100 / 3)}%)`,
-                transition: animating ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
+                transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                 display: 'flex',
                 width: `${Math.max(images.length, 3) * (100 / 3)}%`,
               }}
@@ -88,19 +94,13 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
             </div>
           </div>
 
-          {/* Prev button */}
-          {canPrev && (
-            <button className="detail-nav-btn detail-nav-btn--prev" onClick={prev} aria-label="Previous">
-              <span className="detail-nav-arrow detail-nav-arrow--tl" />
-              <span className="detail-nav-arrow detail-nav-arrow--bl" />
-            </button>
-          )}
+          {/* Prev button — removed, loop is automatic */}
 
-          {/* Next button — always visible at right, loops back to start */}
+          {/* Next button — always fixed at right, manual click resets auto-timer */}
           {images.length > 3 && (
             <button
               className="detail-nav-btn detail-nav-btn--next"
-              onClick={next}
+              onClick={() => { clearInterval(autoRef.current); next(); autoRef.current = setInterval(next, 3000) }}
               aria-label="Next"
             >
               <span className="detail-nav-arrow detail-nav-arrow--tr" />
