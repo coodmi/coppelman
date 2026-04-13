@@ -35,10 +35,11 @@ function setAuthStamp() {
 }
 
 const SORT_OPTIONS = [
-  { value: 'default', label: 'Default' },
-  { value: 'title',   label: 'Title A–Z' },
-  { value: 'author',  label: 'Author A–Z' },
-  { value: 'date',    label: 'Date' },
+  { value: 'default',    label: 'Default' },
+  { value: 'title',      label: 'Title A–Z' },
+  { value: 'date',       label: 'Date' },
+  { value: 'author',     label: 'Told By A–Z' },
+  { value: 'toldAbout',  label: 'Told About A–Z' },
 ]
 
 // Slug helper
@@ -173,9 +174,10 @@ export default function App() {
       list = fuse.search(query).map((r) => r.item)
     }
 
-    if (sortBy === 'title')  list.sort((a, b) => a.title.localeCompare(b.title))
-    if (sortBy === 'author') list.sort((a, b) => a.author.localeCompare(b.author))
-    if (sortBy === 'date')   list.sort((a, b) => b.date.localeCompare(a.date))
+    if (sortBy === 'title')     list.sort((a, b) => a.title.localeCompare(b.title))
+    if (sortBy === 'author')    list.sort((a, b) => (a.author || '').localeCompare(b.author || ''))
+    if (sortBy === 'date')      list.sort((a, b) => b.date.localeCompare(a.date))
+    if (sortBy === 'toldAbout') list.sort((a, b) => (a.related || '').localeCompare(b.related || ''))
     return list
   }, [query, personMode, sortBy, allPosts, fuse, fuseToldBy, fuseToldAbout])
 
