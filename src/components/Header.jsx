@@ -1,4 +1,4 @@
-export default function Header({ onMenuClick, query, onSearch, sortBy, onSortChange, sortOptions, isSearching }) {
+export default function Header({ onMenuClick, query, onSearch, sortBy, onSortChange, sortOptions }) {
   return (
     <header className="header">
       <div className="header-left">
@@ -19,24 +19,21 @@ export default function Header({ onMenuClick, query, onSearch, sortBy, onSortCha
         />
       </div>
 
-      {/* Only show ARRANGE BY on home page, not on search results */}
-      {!isSearching && (
-        <div className="header-right">
-          <div className="header-arrange">
-            <span className="arrange-label">ARRANGE BY</span>
-            <select
-              className="arrange-select"
-              value={sortBy}
-              onChange={(e) => onSortChange(e.target.value)}
-              aria-label="Arrange posts by"
-            >
-              {sortOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
+      <div className="header-right">
+        <div className="header-arrange">
+          <span className="arrange-label">ARRANGE BY</span>
+          <select
+            className="arrange-select"
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value)}
+            aria-label="Arrange posts by"
+          >
+            {sortOptions.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
         </div>
-      )}
+      </div>
     </header>
   )
 }

@@ -278,7 +278,6 @@ export default function App() {
         sortBy={sortBy}
         onSortChange={(v) => setSortBy(v)}
         sortOptions={SORT_OPTIONS}
-        isSearching={!!query.trim()}
       />
 
       {/* Results — inline below header */}
