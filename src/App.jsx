@@ -104,16 +104,18 @@ export default function App() {
   useEffect(() => {
     function onPop() {
       const path = window.location.pathname
-      const postMatch = path.match(/^\/post\/(\d+)/)
-      const catMatch  = path.match(/^\/category\/(.+)/)
+      const postMatch   = path.match(/^\/post\/(\d+)/)
+      const catMatch    = path.match(/^\/category\/(.+)/)
       const personMatch = path.match(/^\/person\/(.+)/)
+
       if (postMatch) {
         const id   = parseInt(postMatch[1])
         const post = (db?.posts ?? []).find(p => p.id === id)
         if (post) { setSelectedPost(post); return }
       }
+      if (path === '/categories') { setCatOpen(true); return }
+      if (path === '/person')     { setPersonOpen(true); return }
       if (catMatch) {
-        // find matching category
         const slug = catMatch[1]
         const cat  = (db?.categories ?? []).find(c => slugify(c) === slug) || slug
         setQuery(cat); setSelectedPost(null); return
@@ -124,6 +126,8 @@ export default function App() {
       }
       setSelectedPost(null)
       setQuery('')
+      setCatOpen(false)
+      setPersonOpen(false)
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
@@ -244,9 +248,9 @@ export default function App() {
       {menuOpen && (
         <Menu
           onClose={() => setMenuOpen(false)}
-          onSearch={(kw) => { setQuery(kw); setMenuOpen(false) }}
-          onViewByCategory={() => { setMenuOpen(false); setCatOpen(true) }}
-          onSearchByPerson={() => { setMenuOpen(false); setPersonOpen(true) }}
+          onSearch={(kw) => { setQuery(kw); setMenuOpen(false); window.history.pushState({}, '', `/search/${slugify(kw)}`) }}
+          onViewByCategory={() => { setMenuOpen(false); setCatOpen(true); window.history.pushState({}, '', '/categories') }}
+          onSearchByPerson={() => { setMenuOpen(false); setPersonOpen(true); window.history.pushState({}, '', '/person') }}
         />
       )}
       {catOpen && (
