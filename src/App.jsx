@@ -275,9 +275,6 @@ export default function App() {
         onMenuClick={() => setMenuOpen(true)}
         query={query}
         onSearch={(q) => { setQuery(q); setPersonMode({}) }}
-        sortBy={sortBy}
-        onSortChange={(v) => setSortBy(v)}
-        sortOptions={SORT_OPTIONS}
         isSearching={!!query.trim()}
       />
 

@@ -29,9 +29,6 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
         onMenuClick={onBack}
         query=""
         onSearch={(q) => { if (q.trim()) onSearch(q) }}
-        sortBy={sortBy}
-        onSortChange={onSortChange}
-        sortOptions={sortOptions}
       />
 
       <div className="detail-body">
