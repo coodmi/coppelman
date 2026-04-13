@@ -7,12 +7,12 @@ export default function SearchResults({ query, posts, onSelect }) {
   const [filterOpen, setFilterOpen] = useState(false)
 
   const filtered = posts.filter((post) => {
-    if (filter === 'ALL')        return true
-    if (filter === 'TOLD BY')    return !!(post.author)
-    if (filter === 'TOLD ABOUT') return !!(post.related)
-    if (filter === 'KEYWORD')    return query.trim()
-      ? (post.title || '').toLowerCase().includes(query.toLowerCase())
-      : true
+    if (filter === 'ALL' || !query.trim()) return true
+    const q = query.toLowerCase()
+    if (filter === 'TOLD BY')    return (post.author  || '').toLowerCase().includes(q)
+    if (filter === 'TOLD ABOUT') return (post.related || '').toLowerCase().includes(q)
+    if (filter === 'KEYWORD')    return (post.title   || '').toLowerCase().includes(q) ||
+                                        (post.body    || '').toLowerCase().includes(q)
     return true
   })
 
