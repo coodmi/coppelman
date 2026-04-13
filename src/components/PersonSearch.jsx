@@ -95,9 +95,6 @@ export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], 
                     </button>
                   ))
                 })()
-                    </div>
-                  ))
-                })()
               ) : showToldBy ? (
                 // Single column: told by
                 (() => {

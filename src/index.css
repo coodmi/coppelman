@@ -801,9 +801,10 @@ body {
 .person-name {
   font-family: 'MinervaModern', Georgia, serif;
   font-size: 30px;
-  line-height: 36px;
-  color: #000;
+  line-height: 1;
+  color: #000000;
   font-weight: 400;
+  letter-spacing: 0;
 }
 
 /* Keyword */
