@@ -85,16 +85,45 @@ export default function App() {
     }
   }
 
+  // Sync URL when category selected
+  function selectCategory(cat) {
+    setQuery(cat)
+    setCatOpen(false)
+    window.history.pushState({}, '', `/category/${slugify(cat)}`)
+  }
+
+  // Sync URL when person search runs
+  function selectPerson(terms, filters) {
+    setQuery(terms)
+    setPersonMode(filters || {})
+    setPersonOpen(false)
+    window.history.pushState({}, '', `/person/${slugify(terms)}`)
+  }
+
   // Handle browser back/forward
   useEffect(() => {
     function onPop() {
-      const match = window.location.pathname.match(/^\/post\/(\d+)/)
-      if (match) {
-        const id   = parseInt(match[1])
+      const path = window.location.pathname
+      const postMatch = path.match(/^\/post\/(\d+)/)
+      const catMatch  = path.match(/^\/category\/(.+)/)
+      const personMatch = path.match(/^\/person\/(.+)/)
+      if (postMatch) {
+        const id   = parseInt(postMatch[1])
         const post = (db?.posts ?? []).find(p => p.id === id)
         if (post) { setSelectedPost(post); return }
       }
+      if (catMatch) {
+        // find matching category
+        const slug = catMatch[1]
+        const cat  = (db?.categories ?? []).find(c => slugify(c) === slug) || slug
+        setQuery(cat); setSelectedPost(null); return
+      }
+      if (personMatch) {
+        setQuery(decodeURIComponent(personMatch[1].replace(/-/g, ' ')))
+        setSelectedPost(null); return
+      }
       setSelectedPost(null)
+      setQuery('')
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
@@ -225,7 +254,7 @@ export default function App() {
           categories={categories}
           posts={allPosts}
           onClose={() => setCatOpen(false)}
-          onSelect={(cat) => { setQuery(cat); setCatOpen(false) }}
+          onSelect={(cat) => selectCategory(cat)}
         />
       )}
       {personOpen && (
@@ -233,11 +262,7 @@ export default function App() {
           toldByPeople={toldByList}
           toldAboutPeople={toldAboutList}
           onClose={() => setPersonOpen(false)}
-          onSearch={(terms, filters) => {
-            setQuery(terms)
-            setPersonMode(filters || { by: [], about: [] })
-            setPersonOpen(false)
-          }}
+          onSearch={(terms, filters) => selectPerson(terms, filters)}
         />
       )}
 
