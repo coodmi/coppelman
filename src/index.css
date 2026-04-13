@@ -1081,10 +1081,12 @@ body {
 .detail-slider-wrap {
   position: relative;
   margin: 24px 0;
+  height: 257px;
 }
 
 .detail-slider {
-  position: relative;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
@@ -1253,7 +1255,7 @@ body {
   .detail-body { padding: 0 0 40px; }
   .detail-title { font-size: 28px; line-height: 36px; padding: 16px 0 14px; }
   .detail-divider { width: 100%; }
-  .detail-slider-wrap { margin: 16px 0; }
+  .detail-slider-wrap { margin: 16px 0; height: 180px; }
   .detail-slider-track { height: 180px; }
   .detail-img { height: 180px; }
   .detail-img--slot0 { width: 55%; }
