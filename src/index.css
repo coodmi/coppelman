@@ -918,6 +918,7 @@ body {
   padding: 0 14px;
   cursor: pointer;
   user-select: none;
+  outline: none;
 }
 
 .results-filter-label {
