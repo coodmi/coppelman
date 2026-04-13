@@ -139,8 +139,10 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
                     <span className="meta-category">{p.category}</span>
                   </div>
                   <h2 className="post-title">{p.title}</h2>
-                  <div className="post-told">{p.toldAbout}</div>
-                  <div className="post-related">{p.related}</div>
+                  <div className="post-told-row">
+                    <span className="post-told">{p.toldAbout}</span>
+                    {p.related && <span className="post-related-inline">{p.related}</span>}
+                  </div>
                 </article>
               ))}
             </div>
