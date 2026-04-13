@@ -224,7 +224,7 @@ body {
 
 .post-item {
   border-top: 1px solid #B8B8B4;
-  padding: 20px 0 40px 89px;
+  padding: 20px 0 40px;
   position: relative;
 }
 
@@ -928,7 +928,7 @@ body {
 }
 
 .results-heading-wrap {
-  padding: 24px 89px 0;
+  padding: 24px 0 0;
 }
 
 .results-heading {
@@ -1197,7 +1197,7 @@ body {
   .arrange-select { width: 120px; height: 36px; font-size: 12px; padding: 0 24px 0 8px; }
 
   /* Post list */
-  .post-item { padding: 16px 0 28px 56px; }
+  .post-item { padding: 16px 0 28px; }
   .post-title { font-size: 26px; line-height: 32px; }
   .no-results { padding: 40px 0; }
 
