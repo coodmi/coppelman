@@ -41,6 +41,11 @@ const SORT_OPTIONS = [
   { value: 'date',    label: 'Date' },
 ]
 
+// Slug helper
+function slugify(text) {
+  return (text || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
 export default function App() {
   const [authed, setAuthed] = useState(() => isAuthValid())
   // Initialize instantly from localStorage so there's no loading flash
@@ -68,13 +73,49 @@ export default function App() {
   const [sortBy, setSortBy]             = useState('default')
   const [selectedPost, setSelectedPost] = useState(null)
 
+  // Sync URL when post selected
+  function selectPost(post) {
+    setSelectedPost(post)
+    if (post) {
+      const slug = slugify(post.title)
+      window.history.pushState({ postId: post.id }, '', `/post/${post.id}-${slug}`)
+    } else {
+      window.history.pushState({}, '', '/')
+    }
+  }
+
+  // Handle browser back/forward
+  useEffect(() => {
+    function onPop() {
+      const match = window.location.pathname.match(/^\/post\/(\d+)/)
+      if (match) {
+        const id   = parseInt(match[1])
+        const post = (db?.posts ?? []).find(p => p.id === id)
+        if (post) { setSelectedPost(post); return }
+      }
+      setSelectedPost(null)
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [db])
+
   function refreshData() {
     fetchAll().then((fresh) => { setCache(fresh); setDb(fresh) })
   }
 
   // Load all data on mount
   useEffect(() => {
-    fetchAll().then((fresh) => { setCache(fresh); setDb(fresh) })
+    fetchAll().then((fresh) => {
+      setCache(fresh)
+      setDb(fresh)
+      // Restore post from URL on initial load
+      const match = window.location.pathname.match(/^\/post\/(\d+)/)
+      if (match) {
+        const id   = parseInt(match[1])
+        const post = fresh.posts?.find(p => p.id === id)
+        if (post) setSelectedPost(post)
+      }
+    })
   }, [])
 
   const allPosts      = db?.posts      ?? []
@@ -156,9 +197,9 @@ export default function App() {
       <PostDetail
         post={selectedPost}
         similarPosts={allPosts.filter((p) => p.id !== selectedPost.id && p.category === selectedPost.category)}
-        onBack={() => setSelectedPost(null)}
-        onSelect={(p) => setSelectedPost(p)}
-        onSearch={(q) => { setQuery(q); setSelectedPost(null) }}
+        onBack={() => selectPost(null)}
+        onSelect={(p) => selectPost(p)}
+        onSearch={(q) => { setQuery(q); selectPost(null) }}
         sortBy={sortBy}
         onSortChange={(v) => setSortBy(v)}
         sortOptions={SORT_OPTIONS}
@@ -214,11 +255,11 @@ export default function App() {
           query={query}
           posts={results}
           onBack={() => setQuery('')}
-          onSelect={(p) => setSelectedPost(p)}
+          onSelect={(p) => selectPost(p)}
           inline
         />
       ) : (
-        <PostList posts={results} onSelect={(p) => setSelectedPost(p)} />
+        <PostList posts={results} onSelect={(p) => selectPost(p)} />
       )}
     </div>
   )

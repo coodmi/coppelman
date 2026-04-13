@@ -7,7 +7,7 @@ RewriteRule ^dashboard/?$ /dashboard.html [L]
 # Don't rewrite API calls or uploaded files
 RewriteRule ^api/ - [L]
 
-# Fallback to index.html for all other routes (SPA)
+# Fallback to index.html for all routes including /post/*
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ /index.html [L]
