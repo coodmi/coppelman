@@ -276,7 +276,6 @@ export default function App() {
       {/* Header always visible */}
       <Header
         onMenuClick={() => setMenuOpen(true)}
-        query={query}
         onSearch={(q) => { setQuery(q); setPersonMode({}); setSearchSource('') }}
         isSearching={!!query.trim()}
       />

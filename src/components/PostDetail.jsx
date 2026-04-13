@@ -27,7 +27,6 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
     <div className="detail-page">
       <Header
         onMenuClick={onBack}
-        query=""
         onSearch={(q) => { if (q.trim()) onSearch(q) }}
       />
 
