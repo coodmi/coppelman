@@ -5,7 +5,7 @@ export default function CategoryMenu({ categories = [], onClose, onSelect }) {
 
   // Normalize: support both old flat strings and new {name, subs} objects
   const cats = categories.map(c =>
-    typeof c === 'string' ? { name: c, subs: [] } : c
+    typeof c === 'string' ? { name: c, subs: [] } : 
   )
 
   function toggle(name) {

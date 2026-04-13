@@ -71,6 +71,7 @@ export default function App() {
   const [personOpen, setPersonOpen]     = useState(false)
   const [query, setQuery]               = useState('')
   const [personMode, setPersonMode]     = useState({})
+  const [searchSource, setSearchSource] = useState('') // 'category' | 'person' | ''
   const [sortBy, setSortBy]             = useState('default')
   const [selectedPost, setSelectedPost] = useState(null)
 
@@ -89,6 +90,7 @@ export default function App() {
   function selectCategory(cat) {
     setQuery(cat)
     setCatOpen(false)
+    setSearchSource('category')
     window.history.pushState({}, '', `/category/${slugify(cat)}`)
   }
 
@@ -97,6 +99,7 @@ export default function App() {
     setQuery(terms)
     setPersonMode(filters || {})
     setPersonOpen(false)
+    setSearchSource('person')
     window.history.pushState({}, '', `/person/${slugify(terms)}`)
   }
 
@@ -274,7 +277,7 @@ export default function App() {
       <Header
         onMenuClick={() => setMenuOpen(true)}
         query={query}
-        onSearch={(q) => { setQuery(q); setPersonMode({}) }}
+        onSearch={(q) => { setQuery(q); setPersonMode({}); setSearchSource('') }}
         isSearching={!!query.trim()}
       />
 
@@ -286,6 +289,7 @@ export default function App() {
         onSelect={(p) => selectPost(p)}
         sortBy={sortBy}
         onSortChange={(v) => setSortBy(v)}
+        searchSource={searchSource}
       />
     </div>
   )
