@@ -7,12 +7,20 @@ export default function SearchResults({ query, posts, onSelect }) {
   const [filterOpen, setFilterOpen] = useState(false)
 
   const filtered = posts.filter((post) => {
-    if (filter === 'ALL' || !query.trim()) return true
-    const q = query.toLowerCase()
-    if (filter === 'TOLD BY')    return (post.author  || '').toLowerCase().includes(q)
-    if (filter === 'TOLD ABOUT') return (post.related || '').toLowerCase().includes(q)
-    if (filter === 'KEYWORD')    return (post.title   || '').toLowerCase().includes(q) ||
-                                        (post.body    || '').toLowerCase().includes(q)
+    if (filter === 'ALL') return true
+    const q = (query || '').trim().toLowerCase()
+    if (filter === 'TOLD BY') {
+      // With query: match author; without query: show posts that have an author
+      return q ? (post.author || '').toLowerCase().includes(q) : !!(post.author)
+    }
+    if (filter === 'TOLD ABOUT') {
+      // With query: match related; without query: show posts that have related people
+      return q ? (post.related || '').toLowerCase().includes(q) : !!(post.related)
+    }
+    if (filter === 'KEYWORD') {
+      // Only works with a query
+      return q ? ((post.title || '').toLowerCase().includes(q) || (post.body || '').toLowerCase().includes(q)) : false
+    }
     return true
   })
 
