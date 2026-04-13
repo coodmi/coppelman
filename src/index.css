@@ -567,11 +567,11 @@ body {
 }
 
 .cat-item-label {
-  font-family: 'MinervaModern', Georgia, serif;
+  font-family: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
   font-size: 42px;
   line-height: 50px;
   color: #000;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .cat-chevron {
