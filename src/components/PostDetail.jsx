@@ -3,37 +3,39 @@ import Header from './Header'
 
 export default function PostDetail({ post, similarPosts, onBack, onSelect, onSearch, sortBy, onSortChange, sortOptions }) {
   const images = post.images || []
-  // Triple the images so we can scroll infinitely without visible jump
-  const looped = images.length > 0 ? [...images, ...images, ...images] : []
-  const startOffset = images.length // start in the middle copy
-  const [offset, setOffset] = useState(startOffset)
+  // Group images into pages of 3
+  const pages = []
+  for (let i = 0; i < images.length; i += 3) pages.push(images.slice(i, i + 3))
+  // Triple pages for seamless loop
+  const loopedPages = pages.length > 0 ? [...pages, ...pages, ...pages] : []
+  const startPage = pages.length // start in middle copy
+  const [page, setPage] = useState(startPage)
   const [transition, setTransition] = useState(true)
   const autoRef = useRef(null)
 
   function next() {
-    if (looped.length <= 3) return
+    if (pages.length <= 1) return
     setTransition(true)
-    setOffset(prev => prev + 1)
+    setPage(prev => prev + 1)
   }
 
-  // When we reach the end of the middle copy, silently reset to middle
+  // Silently reset to middle copy after reaching end
   useEffect(() => {
-    if (offset >= images.length * 2) {
-      // wait for transition to finish then snap back silently
+    if (page >= pages.length * 2) {
       const t = setTimeout(() => {
         setTransition(false)
-        setOffset(images.length)
+        setPage(pages.length)
       }, 520)
       return () => clearTimeout(t)
     }
-  }, [offset, images.length])
+  }, [page, pages.length])
 
   // Auto-loop every 3 seconds
   useEffect(() => {
-    if (images.length <= 3) return
+    if (pages.length <= 1) return
     autoRef.current = setInterval(next, 3000)
     return () => clearInterval(autoRef.current)
-  }, [images.length])
+  }, [pages.length])
 
   return (
     <div className="detail-page">
@@ -66,30 +68,38 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
             <div
               className="detail-slider-track"
               style={{
-                transform: `translateX(-${offset * (100 / 3)}%)`,
+                transform: `translateX(-${page * 100}%)`,
                 transition: transition ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
                 display: 'flex',
-                width: `${Math.max(looped.length, 3) * (100 / 3)}%`,
+                width: `${Math.max(loopedPages.length, 1) * 100}%`,
               }}
             >
-              {looped.length === 0 ? (
-                <>
+              {loopedPages.length === 0 ? (
+                <div style={{ flex: '0 0 100%', display: 'flex' }}>
                   <div className="detail-img detail-img--slot0" style={{ flex: '0 0 33.333%' }} />
                   <div className="detail-img detail-img--slot1" style={{ flex: '0 0 33.333%' }} />
                   <div className="detail-img detail-img--slot2" style={{ flex: '0 0 33.333%' }} />
-                </>
+                </div>
               ) : (
-                looped.map((src, i) => (
-                  <div
-                    key={i}
-                    className="detail-img"
-                    style={{
-                      flex: `0 0 33.333%`,
-                      backgroundImage: `url(${src})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  />
+                loopedPages.map((pg, pi) => (
+                  <div key={pi} style={{ flex: `0 0 ${100 / loopedPages.length}%`, display: 'flex' }}>
+                    {pg.map((src, si) => (
+                      <div
+                        key={si}
+                        className="detail-img"
+                        style={{
+                          flex: '0 0 33.333%',
+                          backgroundImage: `url(${src})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }}
+                      />
+                    ))}
+                    {/* Fill empty slots if last page has < 3 images */}
+                    {pg.length < 3 && Array.from({ length: 3 - pg.length }).map((_, ei) => (
+                      <div key={`e${ei}`} className="detail-img" style={{ flex: '0 0 33.333%', background: '#e8e8e4' }} />
+                    ))}
+                  </div>
                 ))
               )}
             </div>
@@ -98,7 +108,7 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
           {/* Prev button — removed, loop is automatic */}
 
           {/* Next button — always fixed at right, manual click resets auto-timer */}
-          {images.length > 3 && (
+          {pages.length > 1 && (
             <button
               className="detail-nav-btn detail-nav-btn--next"
               onClick={() => { clearInterval(autoRef.current); next(); autoRef.current = setInterval(next, 3000) }}
@@ -111,13 +121,13 @@ export default function PostDetail({ post, similarPosts, onBack, onSelect, onSea
         </div>
 
         {/* Dot indicators */}
-        {images.length > 3 && (
+        {pages.length > 1 && (
           <div className="detail-dots">
-            {Array.from({ length: images.length - 2 }).map((_, i) => (
+            {pages.map((_, i) => (
               <button
                 key={i}
-                className={`detail-dot${(offset - startOffset) % images.length === i ? ' detail-dot--active' : ''}`}
-                onClick={() => { setTransition(true); setOffset(startOffset + i) }}
+                className={`detail-dot${(page - startPage + pages.length) % pages.length === i ? ' detail-dot--active' : ''}`}
+                onClick={() => { setTransition(true); setPage(startPage + i) }}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
