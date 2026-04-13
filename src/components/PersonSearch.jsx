@@ -16,7 +16,8 @@ export default function PersonSearch({ toldByPeople = [], toldAboutPeople = [], 
   }
 
   function handleSearch() {
-    const terms = [...selectedBy, ...selectedAbout, keyword.trim()].filter(Boolean).join(' ')
+    const names = [...new Set([...selectedBy, ...selectedAbout])]
+    const terms = [...names, keyword.trim()].filter(Boolean).join(' ')
     onSearch(terms || '', { by: selectedBy, about: selectedAbout })
   }
 
