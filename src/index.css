@@ -238,20 +238,22 @@ body {
 }
 
 .meta-author {
+  font-family: 'EB Garamond', Garamond, serif;
   font-size: 15px;
   letter-spacing: 0.08em;
-  color: #000;
+  color: #000000;
   padding-right: 24px;
   border-right: 1px solid #B8B8B4;
   margin-right: 24px;
-  line-height: 17px;
+  line-height: 1;
 }
 
 .meta-category {
+  font-family: 'EB Garamond', Garamond, serif;
   font-size: 15px;
   letter-spacing: 0.08em;
-  color: #000;
-  line-height: 17px;
+  color: #000000;
+  line-height: 1;
 }
 
 .post-told {
@@ -283,14 +285,14 @@ body {
 }
 
 .post-title {
-  font-family: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
-  font-size: 44px;
-  line-height: 52px;
-  color: #111;
-  font-weight: 300;
+  font-family: 'MinervaModern', Georgia, serif;
+  font-size: 42px;
+  line-height: 1;
+  color: #000000;
+  font-weight: 400;
   cursor: pointer;
   transition: opacity 0.15s;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
 }
 
