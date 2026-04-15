@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const INCLUDE_OPTIONS = ['ALL', 'KEYWORD', 'TOLD BY', 'TOLD ABOUT']
 
@@ -13,9 +13,6 @@ const ARRANGE_OPTIONS = [
 export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource, personMode }) {
   const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
-
-  // Reset filter on new search query
-  useEffect(() => { setFilter('ALL') }, [query])
 
   const hasQuery   = !!query.trim()
   const useArrange = !hasQuery || searchSource === 'category'
