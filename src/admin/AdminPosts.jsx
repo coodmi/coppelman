@@ -44,7 +44,7 @@ function MultiSelect({ people, selected, onChange }) {
   )
 }
 
-const EMPTY = { title: '', author: '', category: '', toldAbout: 'Told About', related: [], body: '', date: '', images: [] }
+const EMPTY = { title: '', author: '', category: [], toldAbout: 'Told About', related: [], body: '', date: '', images: [] }
 
 export default function AdminPosts() {
   const [posts, setPosts] = useState(getPosts)
@@ -65,7 +65,10 @@ export default function AdminPosts() {
     const related = Array.isArray(post.related)
       ? post.related
       : post.related ? post.related.split(/\s{2,}/).map((s) => s.trim()).filter(Boolean) : []
-    setForm({ ...post, related, images: post.images || [] })
+    const category = Array.isArray(post.category)
+      ? post.category
+      : post.category ? post.category.split(/,\s*/).map(s => s.trim()).filter(Boolean) : []
+    setForm({ ...post, related, category, images: post.images || [] })
     setEditing(post)
   }
 
@@ -73,7 +76,7 @@ export default function AdminPosts() {
 
   async function handleSave() {
     if (!form.title.trim()) return
-    const saved = { ...form, related: form.related.join('  ') }
+    const saved = { ...form, related: form.related.join('  '), category: Array.isArray(form.category) ? form.category.join(', ') : form.category }
     if (editing === 'new') {
       await addPost(saved)
     } else {
@@ -140,24 +143,15 @@ export default function AdminPosts() {
 
           <div className="adm-field">
             <label className="adm-label">Category</label>
-            <select className="adm-select" value={form.category} onChange={(e) => set('category', e.target.value)}>
-              <option value="">— select —</option>
-              {categories.map((c) => {
+            <MultiSelect
+              people={categories.flatMap(c => {
                 const name = typeof c === 'string' ? c : c.name
                 const subs = typeof c === 'string' ? [] : (c.subs || [])
-                if (subs.length === 0) {
-                  return <option key={name} value={name.toUpperCase()}>{name}</option>
-                }
-                return (
-                  <optgroup key={name} label={name}>
-                    <option value={name.toUpperCase()}>{name} — All</option>
-                    {subs.map(sub => (
-                      <option key={sub} value={sub.toUpperCase()}>{sub}</option>
-                    ))}
-                  </optgroup>
-                )
+                return subs.length > 0 ? [name, ...subs] : [name]
               })}
-            </select>
+              selected={Array.isArray(form.category) ? form.category : form.category ? [form.category] : []}
+              onChange={(val) => set('category', val)}
+            />
           </div>
 
           <div className="adm-field">
