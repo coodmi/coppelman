@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 const INCLUDE_OPTIONS = ['ALL', 'KEYWORD', 'TOLD BY', 'TOLD ABOUT']
 
@@ -13,15 +13,9 @@ const ARRANGE_OPTIONS = [
 export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource, personMode }) {
   const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
-  const prevQueryRef = useRef(query)
 
-  // Reset filter only when query actually changes (new search)
-  useEffect(() => {
-    if (prevQueryRef.current !== query) {
-      prevQueryRef.current = query
-      setFilter('ALL')
-    }
-  })
+  // Reset filter on new search query
+  useEffect(() => { setFilter('ALL') }, [query])
 
   const hasQuery   = !!query.trim()
   const useArrange = !hasQuery || searchSource === 'category'
@@ -52,11 +46,17 @@ export default function SearchResults({ query, posts, onSelect, onCategoryClick,
       if (filter === 'ALL') return posts
       const byNames    = (personMode?.by    || []).map(n => n.toLowerCase())
       const aboutNames = (personMode?.about || []).map(n => n.toLowerCase())
-      const allNames   = [...byNames, ...aboutNames]
+      const allNames   = [...new Set([...byNames, ...aboutNames])]
+
       if (filter === 'TOLD BY')
-        return posts.filter(p => allNames.some(n => (p.author || '').toLowerCase().includes(n)))
+        return posts.filter(p =>
+          allNames.some(n => (p.author || '').toLowerCase().includes(n))
+        )
       if (filter === 'TOLD ABOUT')
-        return posts.filter(p => allNames.some(n => (p.related || '').toLowerCase().includes(n)))
+        return posts.filter(p => {
+          const rel = (p.related || '').toLowerCase()
+          return allNames.some(n => rel.includes(n))
+        })
       if (filter === 'KEYWORD') {
         const kw = query.toLowerCase()
         return posts.filter(p =>
