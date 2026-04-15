@@ -34,16 +34,39 @@ export default function SearchResults({ query, posts, onSelect, onCategoryClick,
     return `INCLUDE: ${filter}`
   }
 
-  // Apply include filter only for keyword/person searches
-  const filtered = (!hasQuery || useArrange) ? posts : posts.filter((post) => {
-    if (filter === 'ALL') return true
+  // Apply include filter
+  const filtered = (() => {
+    if (!hasQuery || useArrange) return posts
+
+    // Person search — filter already-correct results by mode
+    if (searchSource === 'person') {
+      if (filter === 'ALL') return posts
+      const byNames    = (personMode?.by    || []).map(n => n.toLowerCase())
+      const aboutNames = (personMode?.about || []).map(n => n.toLowerCase())
+      if (filter === 'TOLD BY')
+        return posts.filter(p => byNames.some(n => (p.author || '').toLowerCase().includes(n)))
+      if (filter === 'TOLD ABOUT')
+        return posts.filter(p => aboutNames.some(n => (p.related || '').toLowerCase().includes(n)))
+      if (filter === 'KEYWORD') {
+        const kw = query.toLowerCase()
+        return posts.filter(p =>
+          (p.title || '').toLowerCase().includes(kw) || (p.body || '').toLowerCase().includes(kw)
+        )
+      }
+      return posts
+    }
+
+    // Keyword search
     const q = query.toLowerCase()
-    if (filter === 'TOLD BY')    return (post.author  || '').toLowerCase().includes(q)
-    if (filter === 'TOLD ABOUT') return (post.related || '').toLowerCase().includes(q)
-    if (filter === 'KEYWORD')    return (post.title   || '').toLowerCase().includes(q) ||
-                                        (post.body    || '').toLowerCase().includes(q)
-    return true
-  })
+    return posts.filter((post) => {
+      if (filter === 'ALL') return true
+      if (filter === 'TOLD BY')    return (post.author  || '').toLowerCase().includes(q)
+      if (filter === 'TOLD ABOUT') return (post.related || '').toLowerCase().includes(q)
+      if (filter === 'KEYWORD')    return (post.title   || '').toLowerCase().includes(q) ||
+                                          (post.body    || '').toLowerCase().includes(q)
+      return true
+    })
+  })()
 
   return (
     <div className="results-page">
