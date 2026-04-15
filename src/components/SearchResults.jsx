@@ -43,10 +43,11 @@ export default function SearchResults({ query, posts, onSelect, onCategoryClick,
       if (filter === 'ALL') return posts
       const byNames    = (personMode?.by    || []).map(n => n.toLowerCase())
       const aboutNames = (personMode?.about || []).map(n => n.toLowerCase())
+      const allNames   = [...byNames, ...aboutNames]
       if (filter === 'TOLD BY')
-        return posts.filter(p => byNames.some(n => (p.author || '').toLowerCase().includes(n)))
+        return posts.filter(p => allNames.some(n => (p.author || '').toLowerCase().includes(n)))
       if (filter === 'TOLD ABOUT')
-        return posts.filter(p => aboutNames.some(n => (p.related || '').toLowerCase().includes(n)))
+        return posts.filter(p => allNames.some(n => (p.related || '').toLowerCase().includes(n)))
       if (filter === 'KEYWORD') {
         const kw = query.toLowerCase()
         return posts.filter(p =>
