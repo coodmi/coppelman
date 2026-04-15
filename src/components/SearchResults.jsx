@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const INCLUDE_OPTIONS = ['ALL', 'KEYWORD', 'TOLD BY', 'TOLD ABOUT']
 
@@ -13,6 +13,9 @@ const ARRANGE_OPTIONS = [
 export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource, personMode }) {
   const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
+
+  // Reset filter when search changes
+  useEffect(() => { setFilter('ALL') }, [query, searchSource])
 
   const hasQuery   = !!query.trim()
   const useArrange = !hasQuery || searchSource === 'category'
@@ -93,7 +96,7 @@ export default function SearchResults({ query, posts, onSelect, onCategoryClick,
                 ? (sortBy && sortBy !== 'default'
                     ? ARRANGE_OPTIONS.find(o => o.value === sortBy)?.label || 'ARRANGE BY'
                     : 'ARRANGE BY')
-                : getIncludeLabel()}
+                : `INCLUDE: ${filter}`}
             </span>
             <span className="results-filter-arrow" />
           </button>
