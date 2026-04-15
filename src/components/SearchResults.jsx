@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const INCLUDE_OPTIONS = ['ALL', 'KEYWORD', 'TOLD BY', 'TOLD ABOUT']
 
@@ -13,9 +13,15 @@ const ARRANGE_OPTIONS = [
 export default function SearchResults({ query, posts, onSelect, onCategoryClick, sortBy, onSortChange, searchSource, personMode }) {
   const [filter, setFilter]         = useState('ALL')
   const [filterOpen, setFilterOpen] = useState(false)
+  const prevQueryRef = useRef(query)
 
-  // Reset filter when search changes
-  useEffect(() => { setFilter('ALL') }, [query, searchSource])
+  // Reset filter only when query actually changes (new search)
+  useEffect(() => {
+    if (prevQueryRef.current !== query) {
+      prevQueryRef.current = query
+      setFilter('ALL')
+    }
+  })
 
   const hasQuery   = !!query.trim()
   const useArrange = !hasQuery || searchSource === 'category'
