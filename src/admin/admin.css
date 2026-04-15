@@ -315,6 +315,19 @@ html, body { margin: 0; padding: 0; height: 100%; }
 .adm-multiselect-option:last-child { border-bottom: none; }
 .adm-multiselect-option:hover { background: #fafaf8; }
 
+.adm-multiselect-option--sub { padding-left: 24px; }
+
+.adm-multiselect-group-header {
+  padding: 8px 12px 4px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: #f5f5f3;
+  border-bottom: 1px solid #e8e8e4;
+}
+
 .adm-multiselect-option input[type="checkbox"] {
   width: 15px;
   height: 15px;

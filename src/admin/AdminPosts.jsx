@@ -44,6 +44,66 @@ function MultiSelect({ people, selected, onChange }) {
   )
 }
 
+function GroupedMultiSelect({ categories, selected, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef()
+
+  useEffect(() => {
+    function handler(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  function toggle(val) {
+    const upper = val.toUpperCase()
+    onChange(selected.includes(upper) ? selected.filter(s => s !== upper) : [...selected, upper])
+  }
+
+  const label = selected.length === 0 ? '— select —' : selected.join(', ')
+
+  return (
+    <div className="adm-multiselect" ref={ref}>
+      <button type="button" className="adm-multiselect-trigger" onClick={() => setOpen(v => !v)}>
+        <span>{label}</span>
+        <span className="adm-multiselect-arrow">▾</span>
+      </button>
+      {open && (
+        <div className="adm-multiselect-dropdown">
+          {categories.map((c) => {
+            const name = typeof c === 'string' ? c : c.name
+            const subs = typeof c === 'string' ? [] : (c.subs || [])
+            const nameUpper = name.toUpperCase()
+            return (
+              <div key={name}>
+                {subs.length > 0 ? (
+                  <>
+                    <div className="adm-multiselect-group-header">{name}</div>
+                    <label className="adm-multiselect-option adm-multiselect-option--sub">
+                      <input type="checkbox" checked={selected.includes(nameUpper)} onChange={() => toggle(name)} />
+                      {name} — All
+                    </label>
+                    {subs.map(sub => (
+                      <label key={sub} className="adm-multiselect-option adm-multiselect-option--sub">
+                        <input type="checkbox" checked={selected.includes(sub.toUpperCase())} onChange={() => toggle(sub)} />
+                        {sub}
+                      </label>
+                    ))}
+                  </>
+                ) : (
+                  <label className="adm-multiselect-option">
+                    <input type="checkbox" checked={selected.includes(nameUpper)} onChange={() => toggle(name)} />
+                    {name}
+                  </label>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const EMPTY = { title: '', author: '', category: [], toldAbout: 'Told About', related: [], body: '', date: '', images: [] }
 
 export default function AdminPosts() {
@@ -143,12 +203,8 @@ export default function AdminPosts() {
 
           <div className="adm-field">
             <label className="adm-label">Category</label>
-            <MultiSelect
-              people={categories.flatMap(c => {
-                const name = typeof c === 'string' ? c : c.name
-                const subs = typeof c === 'string' ? [] : (c.subs || [])
-                return subs.length > 0 ? [name, ...subs] : [name]
-              })}
+            <GroupedMultiSelect
+              categories={categories}
               selected={Array.isArray(form.category) ? form.category : form.category ? [form.category] : []}
               onChange={(val) => set('category', val)}
             />
