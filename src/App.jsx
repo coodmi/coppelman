@@ -187,14 +187,14 @@ export default function App() {
       const aboutNames = personMode.about || []
 
       if (byNames.length > 0 && aboutNames.length > 0) {
+        // Show posts where any selected name appears as author OR in related
+        const allNames = [...byNames, ...aboutNames]
         list = allPosts.filter((post) => {
           const authorLower  = (post.author  || '').toLowerCase()
           const relatedLower = (post.related || '').toLowerCase()
-          const case1 = byNames.some((n) => authorLower.includes(n.toLowerCase())) &&
-                        aboutNames.some((n) => relatedLower.includes(n.toLowerCase()))
-          const case2 = aboutNames.some((n) => authorLower.includes(n.toLowerCase())) &&
-                        byNames.some((n) => relatedLower.includes(n.toLowerCase()))
-          return case1 || case2
+          return allNames.some((n) =>
+            authorLower.includes(n.toLowerCase()) || relatedLower.includes(n.toLowerCase())
+          )
         })
       } else {
         list = allPosts.filter((post) => {
