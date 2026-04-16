@@ -65,13 +65,12 @@ export async function fetchAll() {
       db.posts = lsDb?.posts?.length ? lsDb.posts : initialPosts
       await apiSet('posts', db.posts)
     } else {
-      // Merge in any default posts that don't exist in db yet (by id)
-      const existingIds = new Set(db.posts.map(p => p.id))
-      const missing = initialPosts.filter(p => !existingIds.has(p.id))
-      if (missing.length > 0) {
-        db.posts = [...db.posts, ...missing]
-        await apiSet('posts', db.posts)
-      }
+      // Always restore default posts (ids from initialPosts) to fix any bad category data
+      // Keep only user-created posts (ids not in initialPosts)
+      const fixedIds = new Set(initialPosts.map(p => p.id))
+      const userPosts = db.posts.filter(p => !fixedIds.has(p.id))
+      db.posts = [...initialPosts, ...userPosts]
+      await apiSet('posts', db.posts)
     }
     // Normalize flat categories to structured format
     if (Array.isArray(db.categories) && db.categories.length > 0 && typeof db.categories[0] === 'string') {
