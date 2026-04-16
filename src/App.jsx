@@ -221,7 +221,7 @@ export default function App() {
 
         list = allPosts.filter(post => {
           const cats = (post.category || '').split(/,\s*/).map(c => c.trim().toLowerCase())
-          return cats.some(c => c === qLower || subNames.some(s => c === s || c.includes(s)))
+          return cats.some(c => c === qLower || subNames.some(s => c === s))
         })
       } else {
         list = fuse.search(query).map((r) => r.item)
