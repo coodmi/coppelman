@@ -210,10 +210,21 @@ export default function App() {
     } else {
       if (searchSource === 'category') {
         // Exact category match — support multi-category posts (comma separated)
+        // Also include posts from subcategories when parent is selected
         const qLower = query.toLowerCase()
+        const allCats = _cache?.categories ?? []
+        // Find if query matches a parent category — if so, include subcategories too
+        const parentCat = allCats.find(c => {
+          const name = typeof c === 'string' ? c : c.name
+          return name.toLowerCase() === qLower
+        })
+        const subNames = parentCat && typeof parentCat !== 'string' && parentCat.subs?.length
+          ? parentCat.subs.map(s => s.toLowerCase())
+          : []
+
         list = allPosts.filter(post => {
           const cats = (post.category || '').split(/,\s*/).map(c => c.trim().toLowerCase())
-          return cats.some(c => c === qLower || c.includes(qLower))
+          return cats.some(c => c === qLower || c.includes(qLower) || subNames.includes(c))
         })
       } else {
         list = fuse.search(query).map((r) => r.item)
