@@ -208,7 +208,16 @@ export default function App() {
         })
       }
     } else {
-      list = fuse.search(query).map((r) => r.item)
+      if (searchSource === 'category') {
+        // Exact category match — support multi-category posts (comma separated)
+        const qLower = query.toLowerCase()
+        list = allPosts.filter(post => {
+          const cats = (post.category || '').split(/,\s*/).map(c => c.trim().toLowerCase())
+          return cats.some(c => c === qLower || c.includes(qLower))
+        })
+      } else {
+        list = fuse.search(query).map((r) => r.item)
+      }
     }
 
     if (sortBy === 'title')     list.sort((a, b) => a.title.localeCompare(b.title))

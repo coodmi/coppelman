@@ -1,4 +1,5 @@
 const posts = [
+  // GOLF
   {
     id: 1,
     author: "TOM DOAK",
@@ -34,6 +35,121 @@ const posts = [
     related: "ADRIAN ZECHA  TOM DOAK",
     title: "Walking the land before drawing a single line",
     date: "2024-04",
+  },
+  // POLO & EQUESTRIAN
+  {
+    id: 5,
+    author: "NACHO FIGUERAS",
+    category: "POLO & EQUESTRIAN",
+    toldAbout: "Told About",
+    related: "NACHO FIGUERAS",
+    title: "The bond between a polo player and his horse",
+    date: "2024-05",
+  },
+  {
+    id: 6,
+    author: "NACHO FIGUERAS",
+    category: "POLO & EQUESTRIAN",
+    toldAbout: "Told About",
+    related: "IGNACIO RAMOS SR.",
+    title: "Growing up on the polo fields of Argentina",
+    date: "2024-06",
+  },
+  // WINE
+  {
+    id: 7,
+    author: "JEAN-MICHEL GATHY",
+    category: "WINE",
+    toldAbout: "Told About",
+    related: "JEAN-MICHEL GATHY  BEN COPPLEMEN",
+    title: "Sed do eiusmod tempor incididunt ut labore et dolore magna",
+    date: "2024-07",
+    body: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
+  },
+  {
+    id: 8,
+    author: "HOWARD BACKEN",
+    category: "WINE",
+    toldAbout: "Told About",
+    related: "TOM DOAK  HOWARD BACKEN",
+    title: "Walking the land before drawing a single line",
+    date: "2024-08",
+  },
+  // FARM & VILLAGE
+  {
+    id: 9,
+    author: "KERRY HILL",
+    category: "FARM & VILLAGE",
+    toldAbout: "Told About",
+    related: "KERRY HILL  TADAO ANDO",
+    title: "Architecture that grows from the land",
+    date: "2024-09",
+  },
+  {
+    id: 10,
+    author: "TADAO ANDO",
+    category: "FARM & VILLAGE",
+    toldAbout: "Told About",
+    related: "TADAO ANDO",
+    title: "The silence of rural spaces in modern design",
+    date: "2024-10",
+  },
+  // MUSEUM BY ANDO
+  {
+    id: 11,
+    author: "TADAO ANDO",
+    category: "MUSEUM BY ANDO",
+    toldAbout: "Told About",
+    related: "TADAO ANDO  KERRY HILL",
+    title: "Concrete, light and the art of emptiness",
+    date: "2024-11",
+  },
+  {
+    id: 12,
+    author: "JEAN-MICHEL GATHY",
+    category: "MUSEUM BY ANDO",
+    toldAbout: "Told About",
+    related: "JEAN-MICHEL GATHY",
+    title: "How Ando changed the way we experience space",
+    date: "2024-12",
+  },
+  // THE LAND
+  {
+    id: 13,
+    author: "HOWARD BACKEN",
+    category: "THE LAND",
+    toldAbout: "Told About",
+    related: "HOWARD BACKEN  JONATHAN BREENE",
+    title: "Designing with the landscape not against it",
+    date: "2025-01",
+  },
+  {
+    id: 14,
+    author: "JONATHAN BREENE",
+    category: "THE LAND",
+    toldAbout: "Told About",
+    related: "JONATHAN BREENE",
+    title: "The land as the first client",
+    date: "2025-02",
+  },
+  // ENTREPRENUERSHIP
+  {
+    id: 15,
+    author: "NACHO FIGUERAS",
+    category: "ENTREPRENUERSHIP",
+    toldAbout: "Told About",
+    related: "ASIF MOLLIK",
+    title: "About Asif Mollik",
+    date: "2026-04",
+  },
+  {
+    id: 16,
+    author: "ASIF MOLLIK",
+    category: "ENTREPRENUERSHIP",
+    toldAbout: "Told About",
+    related: "NACHO FIGUERAS",
+    title: "Demo Entreprenuership",
+    date: "2026-04",
   },
 ]
 
