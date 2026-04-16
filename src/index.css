@@ -15,7 +15,7 @@ body {
 }
 
 .page {
-  max-width: 834px;
+  max-width: 1200px;
   margin: 0 auto;
   background: #EDEEEA;
   min-height: 100vh;
@@ -297,14 +297,14 @@ body {
 }
 
 .post-title {
-  font-family: 'Cormorant Garamond', 'EB Garamond', Garamond, serif;
+  font-family: 'EB Garamond', Garamond, serif;
   font-size: 56px;
   line-height: 64px;
   color: #111;
   font-weight: 400;
   cursor: pointer;
   transition: opacity 0.15s;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -922,7 +922,7 @@ body {
 
 /* ── Search Results ── */
 .results-page {
-  max-width: 834px;
+  max-width: 1200px;
   margin: 0 auto;
   background: #EDEEEA;
   min-height: 100vh;
@@ -968,7 +968,7 @@ body {
 
 .results-filter-box {
   box-sizing: border-box;
-  width: 220px;
+  width: 240px;
   height: 46px;
   border: 1px solid #B8B8B4;
   background: #EDEEEA;
@@ -1000,7 +1000,7 @@ body {
   position: absolute;
   top: 46px;
   left: 0;
-  width: 220px;
+  width: 240px;
   z-index: 10;
   border: 1px solid #B8B8B4;
   border-top: none;
@@ -1029,7 +1029,7 @@ body {
 
 /* ── Post Detail ── */
 .detail-page {
-  max-width: 834px;
+  max-width: 1200px;
   margin: 0 auto;
   background: #EDEEEA;
   min-height: 100vh;
