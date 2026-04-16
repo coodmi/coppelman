@@ -92,7 +92,16 @@ export default function App() {
     setQuery(cat)
     setCatOpen(false)
     setSearchSource('category')
-    window.history.pushState({}, '', `/category/${slugify(cat)}`)
+    // Build URL: check if cat is a subcategory — if so use /category/parent/sub
+    const parentCat = categories.find(c => {
+      const subs = typeof c === 'string' ? [] : (c.subs || [])
+      return subs.some(s => s.toLowerCase() === cat.toLowerCase())
+    })
+    const parentName = parentCat ? (typeof parentCat === 'string' ? parentCat : parentCat.name) : null
+    const url = parentName
+      ? `/category/${slugify(parentName)}/${slugify(cat)}`
+      : `/category/${slugify(cat)}`
+    window.history.pushState({}, '', url)
   }
 
   // Sync URL when person search runs
@@ -120,9 +129,17 @@ export default function App() {
       if (path === '/categories') { setCatOpen(true); return }
       if (path === '/person')     { setPersonOpen(true); return }
       if (catMatch) {
-        const slug = catMatch[1]
-        const cat  = (db?.categories ?? []).find(c => slugify(c) === slug) || slug
-        setQuery(cat); setSelectedPost(null); return
+        const slug = catMatch[1] // could be "polo-equestrian/quotes" or just "golf"
+        const parts = slug.split('/')
+        const subSlug = parts[parts.length - 1] // last part is the actual category
+        // Find matching category name from slug
+        const allCatNames = (db?.categories ?? []).flatMap(c => {
+          const name = typeof c === 'string' ? c : c.name
+          const subs = typeof c === 'string' ? [] : (c.subs || [])
+          return [name, ...subs]
+        })
+        const cat = allCatNames.find(n => slugify(n) === subSlug) || subSlug.replace(/-/g, ' ').toUpperCase()
+        setQuery(cat); setSearchSource('category'); setSelectedPost(null); return
       }
       if (personMatch) {
         setQuery(decodeURIComponent(personMatch[1].replace(/-/g, ' ')))
@@ -146,12 +163,24 @@ export default function App() {
     fetchAll().then((fresh) => {
       setCache(fresh)
       setDb(fresh)
-      // Restore post from URL on initial load
-      const match = window.location.pathname.match(/^\/post\/(\d+)/)
-      if (match) {
-        const id   = parseInt(match[1])
+      const path = window.location.pathname
+      const postMatch = path.match(/^\/post\/(\d+)/)
+      const catMatch  = path.match(/^\/category\/(.+)/)
+      if (postMatch) {
+        const id   = parseInt(postMatch[1])
         const post = fresh.posts?.find(p => p.id === id)
         if (post) setSelectedPost(post)
+      } else if (catMatch) {
+        const parts = catMatch[1].split('/')
+        const subSlug = parts[parts.length - 1]
+        const allCatNames = (fresh.categories ?? []).flatMap(c => {
+          const name = typeof c === 'string' ? c : c.name
+          const subs = typeof c === 'string' ? [] : (c.subs || [])
+          return [name, ...subs]
+        })
+        const cat = allCatNames.find(n => slugify(n) === subSlug) || subSlug.replace(/-/g, ' ').toUpperCase()
+        setQuery(cat)
+        setSearchSource('category')
       }
     })
   }, [])
