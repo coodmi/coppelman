@@ -209,12 +209,9 @@ export default function App() {
       }
     } else {
       if (searchSource === 'category') {
-        // Exact category match — support multi-category posts (comma separated)
-        // Also include posts from subcategories when parent is selected
         const qLower = query.toLowerCase()
-        const allCats = _cache?.categories ?? []
-        // Find if query matches a parent category — if so, include subcategories too
-        const parentCat = allCats.find(c => {
+        // Find subcategories of the selected parent
+        const parentCat = categories.find(c => {
           const name = typeof c === 'string' ? c : c.name
           return name.toLowerCase() === qLower
         })
@@ -224,7 +221,7 @@ export default function App() {
 
         list = allPosts.filter(post => {
           const cats = (post.category || '').split(/,\s*/).map(c => c.trim().toLowerCase())
-          return cats.some(c => c === qLower || c.includes(qLower) || subNames.includes(c))
+          return cats.some(c => c === qLower || subNames.some(s => c === s || c.includes(s)))
         })
       } else {
         list = fuse.search(query).map((r) => r.item)
@@ -236,7 +233,7 @@ export default function App() {
     if (sortBy === 'date')      list.sort((a, b) => b.date.localeCompare(a.date))
     if (sortBy === 'toldAbout') list.sort((a, b) => (a.related || '').localeCompare(b.related || ''))
     return list
-  }, [query, personMode, sortBy, allPosts, fuse, fuseToldBy, fuseToldAbout])
+  }, [query, personMode, sortBy, allPosts, categories, searchSource, fuse, fuseToldBy, fuseToldAbout])
 
   // Show loading until data is ready
   if (!db) {
