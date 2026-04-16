@@ -77,10 +77,9 @@ function GroupedMultiSelect({ categories, selected, onChange }) {
               <div key={name}>
                 {subs.length > 0 ? (
                   <>
-                    <div className="adm-multiselect-group-header">{name}</div>
-                    <label className="adm-multiselect-option adm-multiselect-option--sub">
+                    <label className="adm-multiselect-group-header adm-multiselect-option">
                       <input type="checkbox" checked={selected.includes(nameUpper)} onChange={() => toggle(name)} />
-                      {name} — All
+                      {name}
                     </label>
                     {subs.map(sub => (
                       <label key={sub} className="adm-multiselect-option adm-multiselect-option--sub">
